@@ -22,10 +22,19 @@ This third iteration is based on a previous version developed for the enterprise
 + Test it out by running $ruby search_app.rb -r "from:TwitterDev" -s 14d
 + Look for API JSON responses in app's standard out or outbox. 
 
+
+## Example calls
+
+ruby ./search-app.rb -r "snow profile_region:colorado has:media"
+
+ruby ./search-app.rb -c "./config/my_config.yaml" -r "snow has:video -s 14d
+
+ruby ./search-app.rb -c "./config/my_config.yaml" -r "./rules/my_curated_rule.json" -s 12h
+
 ## Introduction
 
 
-
+### Configuring the client
 
 
 
