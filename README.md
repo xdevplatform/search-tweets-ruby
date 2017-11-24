@@ -18,9 +18,9 @@ This third iteration is based on a previous version developed for the enterprise
 + Establish access to, and authentication, for the search API of your choice. See product documentation authentication details. 
 + Clone respository.
 + bundle install. See project Gem file. Need some basic gems like 'json', 'yaml', and 'zlib'. 
-+ Configure the config.yaml. 
-+ Test it out by running $ruby search_app.rb -r "from:TwitterDev" -s 14d
-+ Look for API JSON responses in app's standard out or outbox. 
++ Configure the config.yaml.
++ Test it out by running ```$ruby search_app.rb -h```. You should see a help menu. 
++ Make your first request: ```$ruby search_app.rb -r "from:TwitterDev -s 14d"```. Look for API JSON responses in app's standard out or outbox. 
 
 Other important documentation and resources:
 + Learn about building search filters: https://developer.twitter.com/en/docs/tweets/rules-and-filtering/guides/using-premium-operators
@@ -33,15 +33,15 @@ This command-line app supports a simple set of arguments with which the filter a
 
 This first example illustrates how to pass in a single filter. These fiters can be 2,048 characters long. Since this call does not specify a configuration file, the app looks for one at ```./config/config.yaml```.
 
-```ruby ./search-app.rb -r "snow profile_region:colorado has:media"```
+```$ruby ./search-app.rb -r "snow profile_region:colorado has:media"```
 
 The following call specifies a non-default configuration file, and illustrates one of several time 'helper' formats.
 
-```ruby ./search-app.rb -c "./config/my_config.yaml" -r "snow has:video -s 14d```
+```$ruby ./search-app.rb -c "./config/my_config.yaml" -r "snow has:video -s 14d```
 
 The following call illustrates how to make a 'counts' request with the -l parameter ("l" is for "look before you leap") and passing in a rule JSON file (YAML format also supported). These rules files can contain multiple rules. 
 
-```ruby ./search-app.rb -c "./config/my_config.yaml" -r "./rules/my_curated_rule.json" -s 12h``` -l
+```$ruby ./search-app.rb -c "./config/my_config.yaml" -r "./rules/my_curated_rule.json" -s 12h``` -l
 
 
 ## Introduction
