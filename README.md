@@ -13,7 +13,7 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
 
 This third iteration is based on a previous version developed for the enterprise full-archive search API. That client was in turn based on the initial example developed for the enterprise 30-day search API.
 
-## Getting Started
+## Getting started
 
 + Establish access to, and authentication, for the search API of your choice. See product documentation authentication details. 
 + Clone respository.
@@ -21,6 +21,10 @@ This third iteration is based on a previous version developed for the enterprise
 + Configure the config.yaml. 
 + Test it out by running $ruby search_app.rb -r "from:TwitterDev" -s 14d
 + Look for API JSON responses in app's standard out or outbox. 
+
+Other important documentation and resources:
++ Learn about building search filters: https://developer.twitter.com/en/docs/tweets/rules-and-filtering/guides/using-premium-operators
++ Jump into the API references: [Premium search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/premium-search), [Enterprise search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search) .
 
 
 ## Example calls
@@ -110,9 +114,9 @@ rules:
 
 ### Updates 
 
-This iteration has the following updates from the full-archive version:
+This iteration has the following updates from the [full-archive version](https://github.com/gnip/gnip-fas-ruby):
 
-+ Supports twp flavors of Auth: Basic, Bearer App-only
++ Supports two flavors of Auth: Basic, Bearer App-only
 + Iterated HTTP, Logging common classes
 + Counts requests default to standard out. Must config to write to files (even as writing data to files).
 + "so" = "standard_out"
