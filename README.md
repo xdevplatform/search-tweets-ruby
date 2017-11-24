@@ -29,11 +29,20 @@ Other important documentation and resources:
 
 ## Example calls
 
-ruby ./search-app.rb -r "snow profile_region:colorado has:media"
+This command-line app supports a simple set of arguments with which the filter and search period are specified. Important application configuration details are stored in a YAML file. 
 
-ruby ./search-app.rb -c "./config/my_config.yaml" -r "snow has:video -s 14d
+This first example illustrates how to pass in a single filter. These fiters can be 2,048 characters long. Since this call does not specify a configuration file, the app looks for one at ```./config/config.yaml```.
 
-ruby ./search-app.rb -c "./config/my_config.yaml" -r "./rules/my_curated_rule.json" -s 12h
+```ruby ./search-app.rb -r "snow profile_region:colorado has:media"```
+
+The following call specifies a non-default configuration file, and illustrates one of several time 'helper' formats.
+
+```ruby ./search-app.rb -c "./config/my_config.yaml" -r "snow has:video -s 14d```
+
+The following call illustrates how to make a 'counts' request with the -l parameter ("l" is for "look before you leap") and passing in a rule JSON file (YAML format also supported). These rules files can contain multiple rules. 
+
+```ruby ./search-app.rb -c "./config/my_config.yaml" -r "./rules/my_curated_rule.json" -s 12h``` -l
+
 
 ## Introduction
 
