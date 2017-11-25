@@ -13,7 +13,9 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
 
 This third iteration is based on a previous version developed for the enterprise full-archive search API. That client was in turn based on the initial example developed for the enterprise 30-day search API.
 
-## Getting started
++ [Getting Started](#getting-started)
+
+## Getting started <a id="getting-started" class="tall">&nbsp;</a>
 
 + Establish access to, and authentication, for the search API of your choice. See product documentation authentication details. 
 + Clone respository.
