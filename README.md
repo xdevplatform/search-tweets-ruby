@@ -44,15 +44,65 @@ The following call illustrates how to make a 'counts' request with the -l parame
 ```$ruby ./search-app.rb -c "./config/my_config.yaml" -r "./rules/my_curated_rule.json" -s 12h``` -l
 
 
-## Introduction
+## Details
 
 
 ### Configuring the client
+
+{{{{{ To start making search requests you will need to configure the client's configuration file. This file specifies what search API it should make requests from (it supports 4 versions), and stores settings for many important details such as authentication and file handling.
+
+
+
+```
+options:
+  search: premium #or enterprise
+  archive: 30day
+  write_mode: standard-out #options: files, datastore, so/standard/standard-out --> Store activities in local files, in database. or print to system out?
+  out_box: ./output #Folder where retrieved data goes.
+  counts_to_standard_out: true
+  compress_files: false #[] TODO: compressing output is largely untested. 
+
+#Search configuration details:
+
+auth:
+  app_token:  #Either username or app-only bearer token.
+  password: 
+  
+labels:
+  environment: dev
+  account_name:
+```
+
+### Command-line arguments
+
+
+
+```
+Usage: search-app [options]
+    -c, --config CONFIG              Configuration file (including path) that provides account and download settings.
+                                       Config files include username, password, account name and stream label/name.
+    -r, --rule RULE                  Rule details.  Either a single rule passed in, or a file containing either a
+                                   YAML or JSON array of rules.
+    -s, --start_date START           UTC timestamp for beginning of Search period.
+                                         Specified as YYYYMMDDHHMM, "YYYY-MM-DD HH:MM", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.
+    -e, --end_date END               UTC timestamp for ending of Search period.
+                                      Specified as YYYYMMDDHHMM, "YYYY-MM-DD HH:MM", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.
+    -t, --tag TAG                    Optional. Gets included in the  payload if included. Alternatively, rules files can contain tags.
+    -w, --write WRITE                'files', 'standard-out' (or 'so' or 'standard'), 'store' (database)
+    -o, --outbox OUTBOX              Optional. Triggers the generation of files and where to write them.
+    -z, --zip                        Optional. If writing files, compress the files with gzip.
+    -l, --look                       "Look before you leap..."  Triggers the return of counts only.
+    -d, --duration DURATION          The 'bucket size' for counts, minute, hour (default), or day
+    -m, --max MAXRESULTS             Specify the maximum amount of data results.  10 to 500, defaults to 100.
+    -h, --help                       Display this screen.
+```
 
 
 
 ### Specifying search period start and end times <a id="specifying-times" class="tall">&nbsp;</a>
 
+
+{{{{
 When making search requests, if no "start" and "end" parameters are specified, the APIs default to the most recent 30 days. The request parameters, ```fromDate``` and ```toDate```, are used to specify the time frame of interest (with a minute granularity).
 
 IF not specified, the "fromDate" time defaults to 30 days ago from now, and "toDate" time defaults to "now".  
@@ -60,6 +110,8 @@ IF not specified, the "fromDate" time defaults to 30 days ago from now, and "toD
 The search APIs use a ```YYYMMDDHHMM``` timestamp format
 
 Start and End times are specified using the UTC time standard. 
+}}}}}
+
 
 Start ```-s``` and end ```-e``` parameters can be specified in a variety of ways:
 
