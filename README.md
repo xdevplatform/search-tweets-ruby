@@ -13,7 +13,11 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
 
 This third iteration is based on a previous version developed for the enterprise full-archive search API. That client was in turn based on the initial example developed for the enterprise 30-day search API.
 
-+ [Getting Started](#getting-started)
++ [Getting started](#getting-started)
++ [Example calls](#example-calls)
++ [Details](#details)
+  + [Configuring the client](#configuring)
+
 
 ## Getting started <a id="getting-started" class="tall">&nbsp;</a>
 
@@ -29,7 +33,7 @@ Other important documentation and resources:
 + Jump into the API references: [Premium search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/premium-search), [Enterprise search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search) .
 
 
-## Example calls
+## Example calls <a id="example-calls" class="tall">&nbsp;</a>
 
 This command-line app supports a simple set of arguments with which the filter and search period are specified. Important application configuration details are stored in a YAML file. 
 
@@ -46,10 +50,10 @@ The following call illustrates how to make a 'counts' request with the -l parame
 ```$ruby ./search-app.rb -c "./config/my_config.yaml" -r "./rules/my_curated_rule.json" -s 12h``` -l
 
 
-## Details
+## Details <a id="details" class="tall">&nbsp;</a>
 
 
-### Configuring the client
+### Configuring the client <a id="configuring" class="tall">&nbsp;</a>
 
 {{{{{ To start making search requests you will need to configure the client's configuration file. This file specifies what search API it should make requests from (it supports 4 versions), and stores settings for many important details such as authentication and file handling.
 
