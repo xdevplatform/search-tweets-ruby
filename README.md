@@ -11,12 +11,16 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
 	+ Enterprise 30-Day Search API
 	+ Enterprise Full-Archive API
 
-This third iteration is based on a previous version developed for the enterprise full-archive search API. That client was in turn based on the initial example developed for the enterprise 30-day search API.
+
 
 + [Getting started](#getting-started)
 + [Example calls](#example-calls)
 + [Details](#details)
   + [Configuring the client](#configuring)
+  + [Command-line arguments](#arguments)
+  + [Specifying search period start and end times](#specifying-times)
+  + [Rules files](#rules)
++ [Other details](#other)
 
 
 ## Getting started <a id="getting-started" class="tall">&nbsp;</a>
@@ -79,7 +83,7 @@ labels:
   account_name:
 ```
 
-### Command-line arguments
+### Command-line arguments <a id="arguments" class="tall">&nbsp;</a>
 
 
 
@@ -136,7 +140,7 @@ Start ```-s``` and end ```-e``` parameters can be specified in a variety of ways
 
 
 
-### Rules Files
+### Rules files <a id="rules" class="tall">&nbsp;</a>
 
 Multiple rules can be specified in JSON or YAML files.  Below is an example of each. Note that an individual rule can be specified on the command-line. 
 
@@ -177,7 +181,10 @@ rules:
 
 
 
-## Other details
+## Other details <a id="other" class="tall">&nbsp;</a>
+
+This third iteration is based on a previous version developed for the enterprise full-archive search API. That client was in turn based on the initial example developed for the enterprise 30-day search API.
+
 
 ### Updates 
 
