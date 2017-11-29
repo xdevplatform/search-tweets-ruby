@@ -1,4 +1,4 @@
-# Ruby Tweet search API client
+# Ruby Tweet search client
 
 This Ruby client is written to work with the Twitter premium and enterprise versions of Tweet Search.  This client is a command-line app that supports the following features:
 
@@ -41,6 +41,7 @@ Other important documentation and resources:
 + Jump into the API references: [Premium search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/premium-search), [Enterprise search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
 
 ## Selecting API <a id="select-api" class="tall">&nbsp;</a>
+
 
 
 ## Example calls <a id="example-calls" class="tall">&nbsp;</a>
@@ -95,8 +96,8 @@ labels:
 
 ```
 Usage: search-app [options]
-    -c, --config CONFIG              Configuration file (including path) that provides account and download settings.
-                                       Config files include username, password, account name and stream label/name.
+    -c, --config CONFIG              Configuration file (including path) that provides account and option selections.
+                                       Config file specifies which search api, includes credentials, and sets app options.
     -r, --rule RULE                  Rule details.  Either a single rule passed in, or a file containing either a
                                    YAML or JSON array of rules.
     -s, --start_date START           UTC timestamp for beginning of Search period.
@@ -107,10 +108,12 @@ Usage: search-app [options]
     -w, --write WRITE                'files', 'standard-out' (or 'so' or 'standard'), 'store' (database)
     -o, --outbox OUTBOX              Optional. Triggers the generation of files and where to write them.
     -z, --zip                        Optional. If writing files, compress the files with gzip.
-    -l, --look                       "Look before you leap..."  Triggers the return of counts only.
+    -l, --look                       "Look before you leap..."  Trigger the return of counts only.
     -d, --duration DURATION          The 'bucket size' for counts, minute, hour (default), or day
     -m, --max MAXRESULTS             Specify the maximum amount of data results.  10 to 500, defaults to 100.
+    -x, --exit EXIT                  Specify the maximum amount of requests to make. "Exit app after this many requests."
     -h, --help                       Display this screen.
+
 ```
 
 
@@ -196,16 +199,16 @@ This third iteration is based on a previous version developed for the enterprise
 
 This iteration has the following updates from the [full-archive version](https://github.com/gnip/gnip-fas-ruby):
 
-+ Supports two flavors of Auth: Basic, Bearer App-only
-+ Iterated HTTP, Logging common classes
-+ Counts requests default to standard out. Must config to write to files (even as writing data to files).
-+ "so" = "standard_out"
++ Iterated HTTP class to handle Bearer token authentication.
+  + Supports two flavors of Auth: Basic, Bearer App-only
++ '''/counts.json``` requests default to standard out. Must explicitly request to write count responses to a file. Typical workflow is to repeatedly assess queries by making count requests, then switching to the 'data' endpoint when ready. These exploratory count responses typically do not need to be saved, yet the data definitely does. 
++ "so" = "standard_out"-- adding a shortcut for switching write mode to 'standard out.'
 
 ### Next
 + Stubs for data store writing
 	+ Add in queuing system, with timed clean-up
 + Drops support for Activity Stream Tweet JSON format? 
-+ New common classes: utilities
++ New common classes?: utilities
 
 
 
