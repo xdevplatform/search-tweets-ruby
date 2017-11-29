@@ -96,76 +96,73 @@ The following call illustrates how to make a 'counts' request with the -l parame
 
 ## Details <a id="details" class="tall">&nbsp;</a>
 
-
-
-
 ### Configuring the client <a id="configuring" class="tall">&nbsp;</a>
 
-{{{{{ To start making search requests you will need to configure the client's configuration file. This file specifies what search API it should make requests from (it supports 4 versions), and stores settings for many important details such as authentication and file handling.
+This client relies on a YAML configuration file for some fundamental settings, such as the search API you are working with. This file also contains your credentials for authenticating with your search API of choice.
 
+By default, this file has a path of ```./config/config.yaml```. You can overwrite this default with the ```-c``` command-line option.
 
+Here are the default configuration settings with descriptions of each option:
 
 ```
+#Client options.
 options:
-  search: premium #or enterprise
-  archive: 30day
-  write_mode: standard-out #options: files, datastore, so/standard/standard-out --> Store activities in local files, in database. or print to system out?
-  out_box: ./output #Folder where retrieved data goes.
-  counts_to_standard_out: true
-  compress_files: false #[] TODO: compressing output is largely untested. 
+  search_type: premium # or enterprise
+  archive: 30day # or fullarchive
+  write_mode: standard-out # options: files, so/standard/standard-out --> Store activities in local files or print to system out?
+  out_box: ./output # Folder where retrieved data goes.
+  counts_to_standard_out: true # Always write 'counts' endpoint responses to standard out. Force to file with '-w' option.
 
-#Search configuration details:
-
+#Credentials.
 auth:
-  app_token:  #Either username or app-only bearer token.
-  password: 
+  app_token:  #Either enterprise username or premium app-only bearer token.
+  password:   #Enterprise only.
   
+#Labels used for endpoint URL. Client generates URL with these.  
 labels:
-  environment: dev
-  account_name:
+  environment: dev   #Premium environment name or enterprise endpoint 'label'.
+  account_name:      #Enterprise only. 
+
 ```
 
 ### Command-line arguments <a id="arguments" class="tall">&nbsp;</a>
 
+Once you have the configuration file set up, you can start making requests. Search API request parameters (identical across all premium and enterprise APIs) are specified as arguments via the command line. 
 
+[] TODO: update anchors.
+For making Tweet requests ('data') see our request parameter documentation [HERE](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
+For making *number of Tweets* ('counts') see our request parameter documentation [HERE](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
+
+#### Command-line options:
 
 ```
 Usage: search-app [options]
     -c, --config CONFIG              Configuration file (including path) that provides account and option selections.
                                        Config file specifies which search api, includes credentials, and sets app options.
-    -r, --rule RULE                  Rule details.  Either a single rule passed in, or a file containing either a
+    -r, --rule RULE                  Rule details (maps to API "query" parameter).  Either a single rule passed in, or a file containing either a
                                    YAML or JSON array of rules.
-    -s, --start_date START           UTC timestamp for beginning of Search period.
-                                         Specified as YYYYMMDDHHMM, "YYYY-MM-DD HH:MM", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.
-    -e, --end_date END               UTC timestamp for ending of Search period.
-                                      Specified as YYYYMMDDHHMM, "YYYY-MM-DD HH:MM", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.
     -t, --tag TAG                    Optional. Gets included in the  payload if included. Alternatively, rules files can contain tags.
+    -s, --start_date START           UTC timestamp for beginning of Search period (maps to "fromDate").
+                                         Specified as YYYYMMDDHHMM, \"YYYY-MM-DD HH:MM\", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.
+    -e, --end_date END               UTC timestamp for ending of Search period (maps to "toDate").
+                                      Specified as YYYYMMDDHHMM, \"YYYY-MM-DD HH:MM\", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.
+    -m, --max MAXRESULTS             Specify the maximum amount of data results (maps to "maxResults").  10 to 500, defaults to 100.
+    -l, --look                       "Look before you leap..."  Triggers the return of counts only via the "/counts.json" endpoint.
+    -d, --duration DURATION          The "bucket size" for counts, minute, hour (default), or day. (maps to "bucket")
+    -x, --exit EXIT                  Specify the maximum amount of requests to make. "Exit app after this many requests."
     -w, --write WRITE                'files', 'standard-out' (or 'so' or 'standard'), 'store' (database)
     -o, --outbox OUTBOX              Optional. Triggers the generation of files and where to write them.
     -z, --zip                        Optional. If writing files, compress the files with gzip.
-    -l, --look                       "Look before you leap..."  Trigger the return of counts only.
-    -d, --duration DURATION          The 'bucket size' for counts, minute, hour (default), or day
-    -m, --max MAXRESULTS             Specify the maximum amount of data results.  10 to 500, defaults to 100.
-    -x, --exit EXIT                  Specify the maximum amount of requests to make. "Exit app after this many requests."
     -h, --help                       Display this screen.
-
 ```
-
-
 
 ### Specifying search period start and end times <a id="specifying-times" class="tall">&nbsp;</a>
 
+By default the premium and enterprise search APIs will search from the previous 30 days. However, most search requests will have a more specific period of interest. With these search APIs the start of the search period is specified with the ```fromDate``` parameter, and the end with ```toDate``` request parameter. 
 
-{{{{
-When making search requests, if no "start" and "end" parameters are specified, the APIs default to the most recent 30 days. The request parameters, ```fromDate``` and ```toDate```, are used to specify the time frame of interest (with a minute granularity).
+Both timestamps assume the UTC timezone. If you are making search requests based on a local timezone, you'll need to convert these timestamps to UTC. These search APIs require these timestamps to have the 'YYYYMMDDHHMM' format. As that format suggests, search request periods can have a minute granularity. 
 
-IF not specified, the "fromDate" time defaults to 30 days ago from now, and "toDate" time defaults to "now".  
-
-The search APIs use a ```YYYMMDDHHMM``` timestamp format
-
-Start and End times are specified using the UTC time standard. 
-}}}}}
-
+This client uses the 'start' and 'end' aliases for ```fromDate``` and ```toDate``` parameters, and supports additional timestamp formats.
 
 Start ```-s``` and end ```-e``` parameters can be specified in a variety of ways:
 
@@ -186,7 +183,9 @@ Start ```-s``` and end ```-e``` parameters can be specified in a variety of ways
 
 ### Rules files <a id="rules" class="tall">&nbsp;</a>
 
-Multiple rules can be specified in JSON or YAML files.  Below is an example of each. Note that an individual rule can be specified on the command-line. 
+Search API requests are based on a single rule or filter. When making requests for a single rule, that rule is passed in via the copmmadn-line with the ```-r``` argument. 
+
+However, this client supports making requests with multiple rules, managing the data retrieval for each individual rule. Multiple rules can be specified in JSON or YAML files.  Below is an example of each. 
 
 JSON rules file:
 
@@ -222,7 +221,9 @@ rules:
     tag    : umbrellas
 ```
 
+For example, you can pass in a JSON rules file located at ./rules/my-snow-rules.json with the following argument:
 
+```$ruby search_app.rb -r "./rules/my-snow-rules.json" -s 7d" -x 1```  
 
 
 ## Other details <a id="other" class="tall">&nbsp;</a>
@@ -243,7 +244,7 @@ This iteration has the following updates from the [full-archive version](https:/
 + Stubs for data store writing
 	+ Add in queuing system, with timed clean-up
 + Drops support for Activity Stream Tweet JSON format? 
-+ New common classes?: utilities
++ New common classes?: utilities, logging
 
 
 
