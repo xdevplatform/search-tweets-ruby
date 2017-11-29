@@ -54,30 +54,27 @@ if __FILE__ == $0  #This script code is executed when running this file.
                                        Config file specifies which search api, includes credentials, and sets app options.') { |config| $config = config}
         
         #Search rule.  This can be a single rule ""this exact phrase\" OR keyword"
-        o.on('-r RULE', '--rule', 'Rule details.  Either a single rule passed in, or a file containing either a
+        o.on('-r RULE', '--rule', 'Rule details (maps to API "query" parameter).  Either a single rule passed in, or a file containing either a
                                    YAML or JSON array of rules.') {|rule| $rule = rule}
-
-        #Period of search.  Defaults to end = Now(), start = Now() - 30.days.
-        o.on('-s START', '--start_date', "UTC timestamp for beginning of Search period.
-                                         Specified as YYYYMMDDHHMM, \"YYYY-MM-DD HH:MM\", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.") { |start_date| $start_date = start_date}
-        o.on('-e END', '--end_date', "UTC timestamp for ending of Search period.
-                                      Specified as YYYYMMDDHHMM, \"YYYY-MM-DD HH:MM\", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.") { |end_date| $end_date = end_date}
-
         #Tag, optional.  Not in payload, but triggers a "matching_rules" section with rule/tag values.
         o.on('-t TAG', '--tag', 'Optional. Gets included in the  payload if included. Alternatively, rules files can contain tags.') {|tag| $tag = tag}
+
+        #Period of search.  Defaults to end = Now(), start = Now() - 30.days.
+        o.on('-s START', '--start_date', 'UTC timestamp for beginning of Search period (maps to "fromDate").
+                                         Specified as YYYYMMDDHHMM, \"YYYY-MM-DD HH:MM\", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.') { |start_date| $start_date = start_date}
+        o.on('-e END', '--end_date', 'UTC timestamp for ending of Search period (maps to "toDate").
+                                      Specified as YYYYMMDDHHMM, \"YYYY-MM-DD HH:MM\", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.') { |end_date| $end_date = end_date}
+        o.on('-m MAXRESULTS', '--max', 'Specify the maximum amount of data results (maps to "maxResults").  10 to 500, defaults to 100.') {|max_results| $max_results = max_results}  #... as in look before you leap.
+
+        #These trigger the estimation process, based on "duration" bucket size.
+        o.on('-l', '--look', '"Look before you leap..."  Triggers the return of counts only via the "/counts.json" endpoint.') {|look| $look = look}  #... as in look before you leap.
+        o.on('-d DURATION', '--duration', 'The "bucket size" for counts, minute, hour (default), or day. (maps to "bucket")' ) {|duration| $duration = duration}  #... as in look before you leap.
+
+        o.on('-x EXIT', '--exit', 'Specify the maximum amount of requests to make. "Exit app after this many requests."') {|max_results| $max_results = max_results}  #... as in look before you leap.
 
         o.on('-w WRITE', '--write',"'files', 'standard-out' (or 'so' or 'standard'), 'store' (database)") {|write| $write = write}
         o.on('-o OUTBOX', '--outbox', 'Optional. Triggers the generation of files and where to write them.') {|outbox| $outbox = outbox}
         o.on('-z', '--zip', 'Optional. If writing files, compress the files with gzip.') {|zip| $zip = zip}
-
-        #These trigger the estimation process, based on "duration" bucket size.
-        o.on('-l', '--look', '"Look before you leap..."  Trigger the return of counts only.') {|look| $look = look}  #... as in look before you leap.
-        o.on('-d DURATION', '--duration', "The 'bucket size' for counts, minute, hour (default), or day" ) {|duration| $duration = duration}  #... as in look before you leap.
-
-        o.on('-m MAXRESULTS', '--max', 'Specify the maximum amount of data results.  10 to 500, defaults to 100.') {|max_results| $max_results = max_results}  #... as in look before you leap.
-
-        o.on('-x EXIT', '--exit', 'Specify the maximum amount of requests to make. "Exit app after this many requests."') {|max_results| $max_results = max_results}  #... as in look before you leap.
-
 
         #Help screen.
         o.on( '-h', '--help', 'Display this screen.' ) do
