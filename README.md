@@ -3,15 +3,18 @@
 This Ruby client is written to work with the Twitter premium and enterprise versions of Tweet Search.  This client is a command-line app that supports the following features:
 
 + Can manage an array of filters, making requests for each.
-+ Returns total count for entire request period.`
-+ Flexible ways to specify search period. E.g., ```-s 7d``` specifies the past week.
++ Returns total count for entire request period.
++ Flexible ways to specify search period. E.g., ```-s 7d``` specifies the past week. Other patterns such as "YYYY-MM-DD HH:mm" are also supported.
 + Writes to files or standard out. 
 + Works with:
 	+ Premium Search Tweets: 30-day API
 	+ Enterprise 30-Day Search API
 	+ Enterprise Full-Archive API
+	
+[Premium](https://developer.twitter.com/en/docs/tweets/search/overview/premium) and [enterprise](https://developer.twitter.com/en/docs/tweets/search/overview/enterprise) search APIs are nearly identical but have some important differences. See the linked documents for more information. 
 
 ----------------
+Jump to:
 
 + [Getting started](#getting-started)
 + [Selecting API](#selecting-api)
@@ -22,7 +25,6 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
   + [Specifying search period start and end times](#specifying-times)
   + [Rules files](#rules)
 + [Other details](#other)
-
 --------------------
 
 ## Getting started <a id="getting-started" class="tall">&nbsp;</a>
@@ -31,18 +33,49 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
 + Clone respository.
 + bundle install. See project Gem file. Need some basic gems like 'json', 'yaml', and 'zlib'. 
 + Configure the client. Specify the search API to request from, provide API credentials, and set app options. These are stored in a configuration YAML file.
-+ Review how to pass in srearch request options via the command-line.
++ Review how to pass in srearch request options via the command-line. Search filters are specified with the ```-r``` parameter, and search period start and end times are specified with the ```-s``` and ```-e``` parameters. Some common patterns:
+   + ```-r "from:TwitterDev" -s 14d``` --> Request all Tweets posted by the @TwitterDev account over the past 14 days.
+   + ```-r "snow profile_region:co has:media" -s "2017-12-01 06:00" -e "2017-12-02 06:00" -x 3``` --> Request Tweets matching the specified rule, but stop after three requests. Set the search period to December 1, 2017 in the MST (UTC−6:00) timezone. This example rule translates to "match Tweets with keyword 'snow', posted by someone who calls Colorado home, and had a photo, video, or GIF attached 'natively' with Twitter app."
 + Test it out by running ```$ruby search_app.rb -h```. You should see a help menu. 
-+ Make your first request: ```$ruby search_app.rb -r "from:TwitterDev -s 14d"```. 
++ Make your first request: ```$ruby search_app.rb -r "from:TwitterDev -s 14d" -x 1```. 
 + Look for API JSON responses in app's standard out or outbox. 
 
-Other important documentation and resources:
+### Other important documentation and resources:
 + Learn about building search filters: https://developer.twitter.com/en/docs/tweets/rules-and-filtering/guides/using-premium-operators
 + Jump into the API references: [Premium search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/premium-search), [Enterprise search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
 
-## Selecting API <a id="select-api" class="tall">&nbsp;</a>
+## Selecting API <a id="selecting-api" class="tall">&nbsp;</a>
 
+You specify your search API of choice in the YAML configuration file (```./config/config.yaml``` by default) with the following settings:
 
++ ```search_type```: Set to either ```premium``` or ```enterprise```.
++ ```archive```: Set to either ```30day``` or ```fullarchive```.
+
++ ```environment```: Either the premium environment name you selected with [dev portal](https://developer.twitter.com/en/dashboard), or your enterprise search label. 
++ ```account_name```: If an enterprise customer, this is your subscription account name (case-sensitive).
+
+For example, if you are working with the premium 30-day search API and an environment named 'dev', the settings should be:
+
+```
+options:
+  search_type: premium
+  archive: 30day
+  
+labels:
+  environment: dev
+```  
+
+For example, if you are working with the enterprise full-archive search API, have an account name of 'ThinkSnow' and a search label of 'prod', the settings should be:
+
+```
+options:
+  search_type: enterprise
+  archive: fullarchive
+  
+labels:
+  environment: prod
+  account_name: ThinkSnow
+```  
 
 ## Example calls <a id="example-calls" class="tall">&nbsp;</a>
 
@@ -62,6 +95,8 @@ The following call illustrates how to make a 'counts' request with the -l parame
 
 
 ## Details <a id="details" class="tall">&nbsp;</a>
+
+
 
 
 ### Configuring the client <a id="configuring" class="tall">&nbsp;</a>
