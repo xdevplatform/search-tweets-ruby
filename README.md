@@ -10,9 +10,10 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
 	+ Premium Search Tweets: 30-day API
 	+ Enterprise 30-Day Search API
 	+ Enterprise Full-Archive API
+	
+[Premium](https://developer.twitter.com/en/docs/tweets/search/overview/premium) and [enterprise](https://developer.twitter.com/en/docs/tweets/search/overview/enterprise) search APIs are nearly identical but have some important differences. See the linked documents for more information. 
 
 ----------------
-
 Jump to:
 
 + [Getting started](#getting-started)
@@ -24,7 +25,6 @@ Jump to:
   + [Specifying search period start and end times](#specifying-times)
   + [Rules files](#rules)
 + [Other details](#other)
-
 --------------------
 
 ## Getting started <a id="getting-started" class="tall">&nbsp;</a>
@@ -37,16 +37,45 @@ Jump to:
    + ```-r "from:TwitterDev" -s 14d``` --> Request all Tweets posted by the @TwitterDev account over the past 14 days.
    + ```-r "snow profile_region:co has:media" -s "2017-12-01 06:00" -e "2017-12-02 06:00" -x 3``` --> Request Tweets matching the specified rule, but stop after three requests. Set the search period to December 1, 2017 in the MST (UTC−6:00) timezone. This example rule translates to "match Tweets with keyword 'snow', posted by someone who calls Colorado home, and had a photo, video, or GIF attached 'natively' with Twitter app."
 + Test it out by running ```$ruby search_app.rb -h```. You should see a help menu. 
-+ Make your first request: ```$ruby search_app.rb -r "from:TwitterDev -s 14d"```. 
++ Make your first request: ```$ruby search_app.rb -r "from:TwitterDev -s 14d" -x 1```. 
 + Look for API JSON responses in app's standard out or outbox. 
 
 Other important documentation and resources:
 + Learn about building search filters: https://developer.twitter.com/en/docs/tweets/rules-and-filtering/guides/using-premium-operators
 + Jump into the API references: [Premium search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/premium-search), [Enterprise search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
 
-## Selecting API <a id="select-api" class="tall">&nbsp;</a>
+## Selecting API <a id="selecting-api" class="tall">&nbsp;</a>
 
+You specify your search API of choice in the YAML configuration file (```./config/config.yaml``` by default) with the following settings:
 
++ ```search_type```
++ ```archive```
+
++ ```environment```
++ ```account_name```
+
+For example, if you are working with the premium 30-day search API and an environment named 'dev', the settings should be:
+
+```
+options:
+  search_type: premium
+  archive: 30day
+  
+labels:
+  environment: dev
+```  
+
+For example, if you are working with the enterprise full-archive search API, have an account name of 'ThinkSnow' and a search label of 'prod', the settings should be:
+
+```
+options:
+  search_type: enterprise
+  archive: fullarchive
+  
+labels:
+  environment: prod
+  account_name: ThinkSnow
+```  
 
 ## Example calls <a id="example-calls" class="tall">&nbsp;</a>
 
