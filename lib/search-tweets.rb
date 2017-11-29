@@ -16,7 +16,7 @@ class TweetSearch
 
 	API_ACTIVITY_LIMIT = 500 #Limit on the number of activity IDs per Rehydration API request, can be overridden.
 
-	attr_accessor :product,
+	attr_accessor :search_type,
 	              :archive,
 	              :requester, #Knows RESTful HTTP requests.
 	              :urlData, #Search uses two different end-points...
@@ -59,7 +59,7 @@ class TweetSearch
 	def initialize()
 
 		#Defaults.
-		@product = 'premium'
+		@search_type = 'premium'
 		@archive = '30day'
 		@labels = {}
 		@auth = {}
@@ -89,7 +89,7 @@ class TweetSearch
 
 		#Figuring out the app token and label details...
 		
-		@product = config['options']['search']
+		@search_type = config['options']['search']
 		@archive = config['options']['archive']
 
 		#'Label' details needed for establishing endpoint URI.
@@ -147,15 +147,15 @@ class TweetSearch
 
 	def set_requester
 
-		@requester.product = @product
+		@requester.search_type = @search_type
 		@requester.app_token = @auth[:app_token] #Set the info needed for authentication.
 		@requester.password = @auth[:password] #HTTP class can decrypt password.
 
 		#@urlData = @requester.getFaSearchURL(@account_name, @environment)
-		@urlData = @url_maker.getDataURL(@product, @archive, @labels)
+		@urlData = @url_maker.getDataURL(@search_type, @archive, @labels)
 
 		#@urlCount = @requester.getFaSearchCountURL(@account_name, @environment)
-		@urlCount = @url_maker.getCountURL(@product, @archive, @labels)
+		@urlCount = @url_maker.getCountURL(@search_type, @archive, @labels)
 
 		#Default to the "data" url.
 		@requester.url = @urlData #Pass the URL to the HTTP object.

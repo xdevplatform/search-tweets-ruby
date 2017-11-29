@@ -15,7 +15,7 @@ class Requester
 	require "net/https" # [] Replace with rest-client gem? https://github.com/rest-client/rest-client
 	require "uri"
 
-	attr_accessor :product,
+	attr_accessor :search_type,
 	              :url,
 	              :uri,
 	              :data,
@@ -70,7 +70,7 @@ class Requester
 		request = Net::HTTP::Post.new(uri.path)
 		request.body = @data
 
-		if @product == 'premium'
+		if @search_type == 'premium'
 			request['Authorization'] = "Bearer #{@app_token}"
 		else
 			request.basic_auth(@app_token, @password)
@@ -99,7 +99,7 @@ class Requester
 		request = Net::HTTP::Put.new(uri.path)
 		request.body = @data
 
-		if @product == 'premium'
+		if @search_type == 'premium'
 			request['Authorization'] = "Bearer #{@app_token}"
 		else
 			request.basic_auth(@app_token, @password)
@@ -128,7 +128,7 @@ class Requester
 		http.use_ssl = true
 		request = Net::HTTP::Get.new(uri.request_uri)
 
-		if @product == 'premium'
+		if @search_type == 'premium'
 			request['Authorization'] = "Bearer #{@app_token}"
 		else
 			request.basic_auth(@app_token, @password)
@@ -155,7 +155,7 @@ class Requester
 		request = Net::HTTP::Delete.new(uri.path)
 		request.body = @data
 
-		if @product == 'premium'
+		if @search_type == 'premium'
 			request['Authorization'] = "Bearer #{@app_token}"
 		else
 			request.basic_auth(@app_token, @password)

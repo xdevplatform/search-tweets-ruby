@@ -26,7 +26,7 @@ class URLMaker
 	              :url
 
 	def initialize
-		@product = 'premium'
+		@search_type = 'premium'
 		@archive = '30day'
 		@account_name = nil   #Being explicit about this. If not set, we have 'premium'.
 		@environment = 'dev'  #Best practice is to have a 'dev' environment. So a decent default.
