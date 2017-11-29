@@ -7,7 +7,7 @@
 
 #Example usage: see README.md
 
-require_relative "./lib/tweet-search.rb"
+require_relative "./lib/search-tweets.rb"
 require_relative "./common/utilities.rb"
 
 #=======================================================================================================================
@@ -50,8 +50,8 @@ if __FILE__ == $0  #This script code is executed when running this file.
         # look, duration (defaults to minute), maxResults (defaults to 100)
 
         #Passing in a config file.... Or you can set a bunch of parameters.
-        o.on('-c CONFIG', '--config', 'Configuration file (including path) that provides account and download settings.
-                                       Config files include username, password, account name and stream label/name.') { |config| $config = config}
+        o.on('-c CONFIG', '--config', 'Configuration file (including path) that provides account and option selections.
+                                       Config file specifies which search api, includes credentials, and sets app options.') { |config| $config = config}
         
         #Search rule.  This can be a single rule ""this exact phrase\" OR keyword"
         o.on('-r RULE', '--rule', 'Rule details.  Either a single rule passed in, or a file containing either a
@@ -75,6 +75,9 @@ if __FILE__ == $0  #This script code is executed when running this file.
         o.on('-d DURATION', '--duration', "The 'bucket size' for counts, minute, hour (default), or day" ) {|duration| $duration = duration}  #... as in look before you leap.
 
         o.on('-m MAXRESULTS', '--max', 'Specify the maximum amount of data results.  10 to 500, defaults to 100.') {|max_results| $max_results = max_results}  #... as in look before you leap.
+
+        o.on('-x EXIT', '--exit', 'Specify the maximum amount of requests to make. "Exit app after this many requests."') {|max_results| $max_results = max_results}  #... as in look before you leap.
+
 
         #Help screen.
         o.on( '-h', '--help', 'Display this screen.' ) do

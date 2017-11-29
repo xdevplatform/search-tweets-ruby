@@ -51,7 +51,9 @@ class TweetSearch
 	              :in_box,
 	              :out_box,
 	              :compress_files,
-
+	              
+	              :exit_after,
+	              :request_count,
 	              :request_timestamp #Used for self-throttling of request rates. 
 
 	def initialize()
@@ -73,6 +75,8 @@ class TweetSearch
 		@url_maker = URLMaker.new #Abstracts away the URL details... 
 		@rules = PtRules.new #Can load rules from configuration files.
 
+		@exit_after = nil
+		@request_count = 0
 		@request_timestamp = Time.now - 1 #Used to self-throttle requests.
 
 	end
@@ -458,10 +462,20 @@ class TweetSearch
 		#TODO: puts "For time period: #{time_span}..."
 
 		while !next_token.nil? do
+
+			@request_count ++
+			
 			if next_token == 'first request'
 				next_token = nil
 			end
 			next_token = make_counts_request(rule, start_time, end_time, interval, next_token)
+
+			if !@exit_after.nil?
+				if @request_count >= @exit_after
+					puts "Hit request threshold of #{@exit_after} requests. Quitting."
+					exit
+				end
+			end
 		end
 
 		#TODO: puts "Total counts: #{@count_total}"
@@ -489,11 +503,21 @@ class TweetSearch
 		puts "Retrieving data from #{time_span}..."
 
 		while !next_token.nil? do
+			
+			@request_count ++
+						
 			if next_token == 'first request'
 				next_token = nil
 			end
 			#puts "Next token: #{next_token}"
 			next_token = make_data_request(rule, start_time, end_time, max_results, next_token)
+			
+			if !@exit_after.nil?
+				if @request_count >= @exit_after 
+					puts "Hit request threshold of #{@exit_after} requests. Quitting."
+					exit
+				end
+			end
 		end
 
 	end #process_data
