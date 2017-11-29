@@ -4,16 +4,17 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
 
 + Can manage an array of filters, making requests for each.
 + Returns total count for entire request period.`
-+ Flexible ways to specify search period. E.g., -s 7d specifies the past week.
++ Flexible ways to specify search period. E.g., ```-s 7d``` specifies the past week.
 + Writes to files or standard out. 
 + Works with:
 	+ Premium Search Tweets: 30-day API
 	+ Enterprise 30-Day Search API
 	+ Enterprise Full-Archive API
 
-
+----------------
 
 + [Getting started](#getting-started)
++ [Selecting API](#selecting-api)
 + [Example calls](#example-calls)
 + [Details](#details)
   + [Configuring the client](#configuring)
@@ -22,19 +23,24 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
   + [Rules files](#rules)
 + [Other details](#other)
 
+--------------------
 
 ## Getting started <a id="getting-started" class="tall">&nbsp;</a>
 
 + Establish access to, and authentication, for the search API of your choice. See product documentation authentication details. 
 + Clone respository.
 + bundle install. See project Gem file. Need some basic gems like 'json', 'yaml', and 'zlib'. 
-+ Configure the config.yaml.
++ Configure the client. Specify the search API to request from, provide API credentials, and set app options. These are stored in a configuration YAML file.
++ Review how to pass in srearch request options via the command-line.
 + Test it out by running ```$ruby search_app.rb -h```. You should see a help menu. 
-+ Make your first request: ```$ruby search_app.rb -r "from:TwitterDev -s 14d"```. Look for API JSON responses in app's standard out or outbox. 
++ Make your first request: ```$ruby search_app.rb -r "from:TwitterDev -s 14d"```. 
++ Look for API JSON responses in app's standard out or outbox. 
 
 Other important documentation and resources:
 + Learn about building search filters: https://developer.twitter.com/en/docs/tweets/rules-and-filtering/guides/using-premium-operators
-+ Jump into the API references: [Premium search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/premium-search), [Enterprise search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search) .
++ Jump into the API references: [Premium search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/premium-search), [Enterprise search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
+
+## Selecting API <a id="select-api" class="tall">&nbsp;</a>
 
 
 ## Example calls <a id="example-calls" class="tall">&nbsp;</a>
