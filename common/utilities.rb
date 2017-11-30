@@ -3,7 +3,7 @@ module Utilities
 	#-----------------------------------------------------
 
 	#Confirm a directory exists, creating it if necessary.
-	def checkDirectory(directory)
+	def Utilities.checkDirectory(directory)
 		#Make sure directory exists, making it if needed.
 		if not File.directory?(directory)
 			FileUtils.mkpath(directory) #logging and user notification.

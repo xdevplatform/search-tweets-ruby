@@ -68,9 +68,9 @@ if __FILE__ == $0  #This script code is executed when running this file.
 
         #These trigger the estimation process, based on "duration" bucket size.
         o.on('-l', '--look', '"Look before you leap..."  Triggers the return of counts only via the "/counts.json" endpoint.') {|look| $look = look}  #... as in look before you leap.
-        o.on('-d DURATION', '--duration', 'The "bucket size" for counts, minute, hour (default), or day. (maps to "bucket")' ) {|duration| $duration = duration}  #... as in look before you leap.
+        o.on('-d DURATION', '--duration', 'The "bucket size" for counts, minute, hour (default), or day. (maps to "bucket")' ) {|duration| $duration = duration}  
 
-        o.on('-x EXIT', '--exit', 'Specify the maximum amount of requests to make. "Exit app after this many requests."') {|max_results| $max_results = max_results}  #... as in look before you leap.
+        o.on('-x EXIT', '--exit', 'Specify the maximum amount of requests to make. "Exit app after this many requests."') {|exit_after| $exit_after = exit_after}
 
         o.on('-w WRITE', '--write',"'files', 'standard-out' (or 'so' or 'standard'), 'store' (database)") {|write| $write = write}
         o.on('-o OUTBOX', '--outbox', 'Optional. Triggers the generation of files and where to write them.') {|outbox| $outbox = outbox}
@@ -173,6 +173,11 @@ if __FILE__ == $0  #This script code is executed when running this file.
     #Max results is optional, defaults to 100 by Search API.
     if !$max_results.nil?
         oSearch.max_results = $max_results
+    end
+
+    #Max results is optional, defaults to 100 by Search API.
+    if !$exit_after.nil?
+	    oSearch.exit_after = $exit_after.to_i
     end
     
     #Handle 'write' option

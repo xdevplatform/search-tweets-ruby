@@ -12,6 +12,7 @@ class TweetSearch
 	require_relative "../common/requester"
 	require_relative "../common/rules"
 	require_relative "../common/url_maker"
+	require_relative "../common/utilities.rb"
 	#require_relative "../common/database"
 
 	API_ACTIVITY_LIMIT = 500 #Limit on the number of activity IDs per Rehydration API request, can be overridden.
@@ -66,7 +67,7 @@ class TweetSearch
 		
 		@interval = 'day'
 		@max_results = API_ACTIVITY_LIMIT
-		@out_box = './'
+		@out_box = './outbox'
 		@write_mode = 'standard-out'
 		@counts_to_standard_out = false
 
@@ -89,7 +90,7 @@ class TweetSearch
 
 		#Figuring out the app token and label details...
 		
-		@search_type = config['options']['search']
+		@search_type = config['options']['search_type']
 		@archive = config['options']['archive']
 
 		#'Label' details needed for establishing endpoint URI.
@@ -121,9 +122,9 @@ class TweetSearch
 		@write_mode = config['options']['write_mode']
 
 		begin
-			@out_box = checkDirectory(config['options']['out_box'])
+			@out_box =  Utilities.checkDirectory(config['options']['out_box'])
 		rescue
-			@out_box = './'
+			@out_box = './outbox'
 		end
 
 		begin
@@ -420,6 +421,7 @@ class TweetSearch
 					new_file.write_mode(api_response.to_json)
 				end
 			end
+=begin
 		elsif @write_mode == "database" #store in database.
 			puts "Storing Search API data in database..."
 
@@ -431,6 +433,7 @@ class TweetSearch
 				#p activity
 				@datastore.storeActivity(activity.to_json)
 			end
+=end
 		else #Standard out
 			results = []
 			results = api_response['results']
@@ -463,7 +466,7 @@ class TweetSearch
 
 		while !next_token.nil? do
 
-			@request_count ++
+			@request_count += 1
 			
 			if next_token == 'first request'
 				next_token = nil
@@ -504,7 +507,7 @@ class TweetSearch
 
 		while !next_token.nil? do
 			
-			@request_count ++
+			@request_count += 1
 						
 			if next_token == 'first request'
 				next_token = nil
