@@ -4,8 +4,9 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
 
 + Can manage an array of filters, making requests for each.
 + Returns total count for entire request period.
-+ Flexible ways to specify search period. E.g., ```-s 7d``` specifies the past week. Other patterns such as "YYYY-MM-DD HH:mm" are also supported.
-+ Writes to files or standard out. 
++ Supports flexible ways to specify search period. E.g., ```-s 7d``` specifies the past week. Other patterns such as ```YYYY-MM-DD HH:mm```, standard Twitter ISO timestamps, and the enterprise ```YYYYMMDDhhmm``` pattern are also supported.
++ Writes to files or standard out. (Writing to a datastore... coming soon?)
++ Can stop making requests after a specified number. If your search query and period match millions of Tweets that would require hundreds of requests, you could have the client stop after four requests by adding the ```-x 4``` argument. 
 + Works with:
 	+ Premium Search Tweets: 30-day API
 	+ Enterprise 30-Day Search API
@@ -33,7 +34,7 @@ Jump to:
 + Clone respository.
 + bundle install. See project Gem file. Need some basic gems like 'json', 'yaml', and 'zlib'. 
 + Configure the client. Specify the search API to request from, provide API credentials, and set app options. These are stored in a configuration YAML file.
-+ Review how to pass in srearch request options via the command-line. Search filters are specified with the ```-r``` parameter, and search period start and end times are specified with the ```-s``` and ```-e``` parameters. Some common patterns:
++ Review how to pass in search request options via the command-line. Search filters are specified with the ```-r``` parameter, and search period start and end times are specified with the ```-s``` and ```-e``` parameters. Some common patterns:
    + ```-r "from:TwitterDev" -s 14d``` --> Request all Tweets posted by the @TwitterDev account over the past 14 days.
    + ```-r "snow profile_region:co has:media" -s "2017-12-01 06:00" -e "2017-12-02 06:00" -x 3``` --> Request Tweets matching the specified rule, but stop after three requests. Set the search period to December 1, 2017 in the MST (UTC−6:00) timezone. This example rule translates to "match Tweets with keyword 'snow', posted by someone who calls Colorado home, and had a photo, video, or GIF attached 'natively' with Twitter app."
 + Test it out by running ```$ruby search_app.rb -h```. You should see a help menu. 
@@ -44,14 +45,14 @@ Jump to:
 + Learn about building search filters: https://developer.twitter.com/en/docs/tweets/rules-and-filtering/guides/using-premium-operators
 + Jump into the API references: [Premium search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/premium-search), [Enterprise search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
 
-## Selecting API <a id="selecting-api" class="tall">&nbsp;</a>
+## Selecting search API <a id="selecting-api" class="tall">&nbsp;</a>
 
-You specify your search API of choice in the YAML configuration file (```./config/config.yaml``` by default) with the following settings:
+You specify target search API in the YAML configuration file (```./config/config.yaml``` by default) with the following settings:
 
 + ```search_type```: Set to either ```premium``` or ```enterprise```.
 + ```archive```: Set to either ```30day``` or ```fullarchive```.
 
-+ ```environment```: Either the premium environment name you selected with [dev portal](https://developer.twitter.com/en/dashboard), or your enterprise search label. 
++ ```environment```: Either the premium environment name you selected with the [dev portal](https://developer.twitter.com/en/dashboard), or your enterprise search label (typically 'dev' or 'prod'). 
 + ```account_name```: If an enterprise customer, this is your subscription account name (case-sensitive).
 
 For example, if you are working with the premium 30-day search API and an environment named 'dev', the settings should be:
@@ -65,7 +66,7 @@ labels:
   environment: dev
 ```  
 
-For example, if you are working with the enterprise full-archive search API, have an account name of 'ThinkSnow' and a search label of 'prod', the settings should be:
+If you are working with the enterprise full-archive search API, have an account name of 'ThinkSnow' and a search label of 'prod', the settings should be:
 
 ```
 options:
@@ -178,8 +179,6 @@ Start ```-s``` and end ```-e``` parameters can be specified in a variety of ways
 
 + "YYYY-MM-DD HH:mm" (UTC, use double-quotes please).
 	+ -s "2017-11-04 07:00" -e "2017-11-07 07:00" --> Tweets from between 2017-11-04 and 2017-11-06 MST.
-
-
 
 ### Rules files <a id="rules" class="tall">&nbsp;</a>
 
