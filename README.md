@@ -20,7 +20,7 @@ Jump to:
 + [Getting started](#getting-started)
 + [Selecting API](#selecting-api)
 + [Example calls](#example-calls)
-+ [Details](#details)
++ [Fundamental Details](#details)
   + [Configuring the client](#configuring)
   + [Command-line arguments](#arguments)
   + [Specifying search period start and end times](#specifying-times)
@@ -40,6 +40,8 @@ Jump to:
 + Test it out by running ```$ruby search_app.rb -h```. You should see a help menu. 
 + Make your first request: ```$ruby search_app.rb -r "from:TwitterDev -s 14d" -x 1```. 
 + Look for API JSON responses in app's standard out or outbox. 
+
+
 
 ### Other important documentation and resources:
 + Learn about building search filters: https://developer.twitter.com/en/docs/tweets/rules-and-filtering/guides/using-premium-operators
@@ -95,7 +97,7 @@ The following call illustrates how to make a 'counts' request with the -l parame
 ```$ruby ./search-app.rb -c "./config/my_config.yaml" -r "./rules/my_curated_rule.json" -s 12h``` -l
 
 
-## Details <a id="details" class="tall">&nbsp;</a>
+## Fundamental details <a id="details" class="tall">&nbsp;</a>
 
 ### Configuring the client <a id="configuring" class="tall">&nbsp;</a>
 
@@ -238,12 +240,14 @@ This iteration has the following updates from the [full-archive version](https:/
   + Supports two flavors of Auth: Basic, Bearer App-only
 + '''/counts.json``` requests default to standard out. Must explicitly request to write count responses to a file. Typical workflow is to repeatedly assess queries by making count requests, then switching to the 'data' endpoint when ready. These exploratory count responses typically do not need to be saved, yet the data definitely does. 
 + "so" = "standard_out"-- adding a shortcut for switching write mode to 'standard out.'
++ Added a /common/utilities.rb mix-in module that provides simple general tools.
 
 ### Next
 + Stubs for data store writing
-	+ Add in queuing system, with timed clean-up
-+ Drops support for Activity Stream Tweet JSON format? 
-+ New common classes?: utilities, logging
+
++ Add in queuing system, with timed clean-up? E.g., dropped every 15-minutes. 
++ Drops support for Activity Stream Tweet JSON format? Yes, if only to clean-up for blending in TweetParser class that holds all the logic. 
++ New common classes?: logging has been abstracted away into a [AppLogger](https://github.com/twitterdev/engagement-api-client-ruby/blob/master/common/app_logger.rb) class. Haven't plugged into this client yet... 
 
 
 
