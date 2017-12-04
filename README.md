@@ -41,10 +41,9 @@ Jump to:
 + Make your first request: ```$ruby search_app.rb -r "from:TwitterDev -s 14d" -x 1```. 
 + Look for API JSON responses in app's standard out or outbox. 
 
-
-
 ### Other important documentation and resources:
 + Learn about building search filters: https://developer.twitter.com/en/docs/tweets/rules-and-filtering/guides/using-premium-operators
++ Review the list of premium operators: https://developer.twitter.com/en/docs/tweets/search/guides/premium-operators
 + Jump into the API references: [Premium search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/premium-search), [Enterprise search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
 
 ## Selecting search API <a id="selecting-api" class="tall">&nbsp;</a>
