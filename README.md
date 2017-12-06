@@ -237,14 +237,14 @@ This iteration has the following updates from the [full-archive version](https:/
 
 + Iterated HTTP class to handle Bearer token authentication.
   + Supports two flavors of Auth: Basic, Bearer App-only
-+ '''/counts.json``` requests default to standard out. Must explicitly request to write count responses to a file. Typical workflow is to repeatedly assess queries by making count requests, then switching to the 'data' endpoint when ready. These exploratory count responses typically do not need to be saved, yet the data definitely does. 
-+ "so" = "standard_out"-- adding a shortcut for switching write mode to 'standard out.'
-+ Added a /common/utilities.rb mix-in module that provides simple general tools.
++ ```/counts.json``` requests default to standard out. Must explicitly request to write count responses to a file. Typical workflow is to repeatedly assess queries by making count requests, then switching to the 'data' endpoint when ready. These exploratory count responses typically do not need to be saved, yet the data definitely does. 
++ ```so``` = ```standard_out``` -- adding a shortcut for switching write mode to 'standard out.'
++ Added a ```/common/utilities.rb``` mix-in module that provides simple general tools. Many are time object formatters... 
 
 ### Next
 + Stubs for data store writing
-
-+ Add in queuing system, with timed clean-up? E.g., dropped every 15-minutes. 
+  + Reference a ```/common/datastore.rb``` class that marshals Tweets to a datastore: relational db, NoSQL, queue.
+  + Add in queuing system, with timed clean-up? E.g., dropped every 15-minutes. 
 + Drops support for Activity Stream Tweet JSON format? Yes, if only to clean-up for blending in TweetParser class that holds all the logic. 
 + New common classes?: logging has been abstracted away into a [AppLogger](https://github.com/twitterdev/engagement-api-client-ruby/blob/master/common/app_logger.rb) class. Haven't plugged into this client yet... 
 
