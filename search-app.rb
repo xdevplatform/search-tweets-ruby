@@ -181,7 +181,7 @@ if __FILE__ == $0  #This script code is executed when running this file.
     end
     
     #Handle 'write' option
-    if $write.nil?
+    if !$write.nil?
 			oSearch.write_mode = $write
 			
 			if oSearch.write_mode == "so" or oSearch.write_mode == "standard"
