@@ -8,7 +8,7 @@ class TweetSearch
 	require "time"
 
 	#Common classes
-	require_relative "../common/config"
+	#require_relative "../common/config"
 	require_relative "../common/requester"
 	require_relative "../common/rules"
 	require_relative "../common/url_maker"
