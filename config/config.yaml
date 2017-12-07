@@ -1,0 +1,30 @@
+# Any corresponding command-line arguments override these. This establish default configuration details.
+# Rules/filters are specified via command-line, or with a rules JSON or YAML file.
+
+#Client options.
+
+options:
+  search_type: premium # or enterprise
+  archive: 30day # or fullarchive
+  write_mode: standard-out # options: files, so/standard/standard-out, datastore
+  out_box: ./output # Folder where retrieved data goes.
+  counts_to_standard_out: true # Always write 'counts' endpoint responses to standard out. Force to file with '-w' option.
+  compress_files: false #[] TODO: compressing output is largely untested. 
+
+#Credentials.
+auth:
+  app_token:  #Either username or app-only bearer token.
+  password: 
+  
+#Labels used for endpoint URL. Client generates URL with these.
+labels:
+  environment: dev   #Premium environment name or enterprise endpoint 'label'.
+  account_name:      #Enterprise only. 
+  
+datastore:
+  type: mysql #mongo, sqlserver, postgres, queue
+  host: 127.0.0.1
+  port: 3306
+  collection: developmemt
+  user_name: MyUserName
+  password: n0TMyP455w0rD
