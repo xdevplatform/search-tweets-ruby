@@ -1,6 +1,8 @@
 ```
 [] Add ENV credential options, move details to new Configuration class.
 [] Add url option, to simply configuration? Current design makes switching APIs easier?
+[] Add error handling for start-up/config issues. Currently, once the app is set-up, error handling is OK. 
+[] Fix needing to specify config path. Default is not working.
 ```
 
 -------------------------------------
@@ -39,16 +41,33 @@ Jump to:
 
 ## Getting started <a id="getting-started" class="tall">&nbsp;</a>
 
-+ Establish access to, and authentication, for the search API of your choice. See product documentation authentication details. 
-+ Clone respository.
-+ bundle install. See project Gem file. Need some basic gems like 'json', 'yaml', and 'zlib'. 
-+ Configure the client. Specify the search API to request from, provide API credentials, and set app options. These are stored in a configuration YAML file.
-+ Review how to pass in search request options via the command-line. Search filters are specified with the ```-r``` parameter, and search period start and end times are specified with the ```-s``` and ```-e``` parameters. Some common patterns:
+Four fundamental steps need to be taken to start using this search client: 
+
+1) Establish access to the API(s) of choice
+2) Have your API credentials on hand
+3) Get this Ruby app running in your environment. 
+4) Configure client and start making search requests.
+
++ Establish access to API:
+  + For premium APIs, you can start that process at https://developer.twitter.com/en/dashboard.
+  + For enterprise APIs, please reach out to your account representative to obtain access. 
+  
++ Obtain credentials for authenticating with the API
+  + For premium APIs, you'll need to create a Twitter app and generate a application token and secret, and use those to generate a Bearer Token. For more information, see our documentation [HERE]().
+  + For enterprise APIs, you will work with your account manager and establish your endpoint 'labels', and be given instructions on how to log into your own console, where you can create multiple accounts.
+
++ Install client in your environment:
+  + Clone respository.
+  + Get gems installed with ```bundle install```. See project Gem file. Need some basic gems like 'json', 'yaml', and 'zlib'. 
+  + Test it out by running ```$ruby search-app.rb -h```. You should see a help menu. 
+
++ Configure the client.
+  + Specify the search API to request from, provide API credentials, and set app options. These are stored in a configuration YAML file.
+  + Review how to pass in search request options via the command-line. Search filters are specified with the ```-r``` parameter, and search period start and end times are specified with the ```-s``` and ```-e``` parameters. Some common patterns:
    + ```-r "from:TwitterDev" -s 14d``` --> Request all Tweets posted by the @TwitterDev account over the past 14 days.
    + ```-r "snow profile_region:co has:media" -s "2017-12-01 06:00" -e "2017-12-02 06:00" -x 3``` --> Request Tweets matching the specified rule, but stop after three requests. Set the search period to December 1, 2017 in the MST (UTC−6:00) timezone. This example rule translates to "match Tweets with keyword 'snow', posted by someone who calls Colorado home, and had a photo, video, or GIF attached 'natively' with Twitter app."
-+ Test it out by running ```$ruby search-app.rb -h```. You should see a help menu. 
-+ Make your first request: ```$ruby search-app.rb -r "from:TwitterDev -s 14d" -x 1```. 
-+ Look for API JSON responses in app's standard out or outbox. 
+  + Make your first request: ```$ruby search-app.rb -r "from:TwitterDev -s 14d" -x 1```. 
+  + Look for API JSON responses in app's standard out or outbox. 
 
 ### Other important documentation and resources:
 + Learn about building search filters: https://developer.twitter.com/en/docs/tweets/rules-and-filtering/guides/using-premium-operators
