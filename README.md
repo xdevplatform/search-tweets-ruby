@@ -36,8 +36,8 @@ Jump to:
 + Review how to pass in search request options via the command-line. Search filters are specified with the ```-r``` parameter, and search period start and end times are specified with the ```-s``` and ```-e``` parameters. Some common patterns:
    + ```-r "from:TwitterDev" -s 14d``` --> Request all Tweets posted by the @TwitterDev account over the past 14 days.
    + ```-r "snow profile_region:co has:media" -s "2017-12-01 06:00" -e "2017-12-02 06:00" -x 3``` --> Request Tweets matching the specified rule, but stop after three requests. Set the search period to December 1, 2017 in the MST (UTC−6:00) timezone. This example rule translates to "match Tweets with keyword 'snow', posted by someone who calls Colorado home, and had a photo, video, or GIF attached 'natively' with Twitter app."
-+ Test it out by running ```$ruby search_app.rb -h```. You should see a help menu. 
-+ Make your first request: ```$ruby search_app.rb -r "from:TwitterDev -s 14d" -x 1```. 
++ Test it out by running ```$ruby search-app.rb -h```. You should see a help menu. 
++ Make your first request: ```$ruby search-app.rb -r "from:TwitterDev -s 14d" -x 1```. 
 + Look for API JSON responses in app's standard out or outbox. 
 
 ### Other important documentation and resources:
