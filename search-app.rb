@@ -15,8 +15,6 @@ if __FILE__ == $0  #This script code is executed when running this file.
 
     require 'optparse'
     require 'base64'
-    
-
 
     #-------------------------------------------------------------------------------------------------------------------
     #Example command-lines
@@ -72,7 +70,7 @@ if __FILE__ == $0  #This script code is executed when running this file.
 
         o.on('-x EXIT', '--exit', 'Specify the maximum amount of requests to make. "Exit app after this many requests."') {|exit_after| $exit_after = exit_after}
 
-        o.on('-w WRITE', '--write',"'files', 'standard-out' (or 'so' or 'standard'), 'store' (database)") {|write| $write = write}
+        o.on('-w WRITE', '--write',"'files', 'standard-out' (or 'so' or 'standard'), 'datastore' (relational? mongo?)") {|write| $write = write}
         o.on('-o OUTBOX', '--outbox', 'Optional. Triggers the generation of files and where to write them.') {|outbox| $outbox = outbox}
         o.on('-z', '--zip', 'Optional. If writing files, compress the files with gzip.') {|zip| $zip = zip}
 
@@ -167,7 +165,7 @@ if __FILE__ == $0  #This script code is executed when running this file.
     #Handle end date.
     #First see if it was passed in
     if !$end_date.nil?
-        oSearch.to_date = oSearch.set_date_string($end_date)
+        oSearch.to_date = Utilities.set_date_string($end_date)
     end
 
     #Max results is optional, defaults to 100 by Search API.
