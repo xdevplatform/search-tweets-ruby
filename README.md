@@ -25,7 +25,9 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
 Jump to:
 
 + [Getting started](#getting-started)
-+ [Selecting API](#selecting-api)
+  + [Selecting API](#selecting-api)
+  + [Setting credentials](#credentials)
+  + [Configuring custom URL](#urls)
 + [Example calls](#example-calls)
 + [Fundamental Details](#details)
   + [Configuring the client](#configuring)
@@ -60,30 +62,23 @@ You specify target search API in the YAML configuration file (```./config/config
 + ```search_type```: Set to either ```premium``` or ```enterprise```.
 + ```archive```: Set to either ```30day``` or ```fullarchive```.
 
-+ ```environment```: Either the premium environment name you selected with the [dev portal](https://developer.twitter.com/en/dashboard), or your enterprise search label (typically 'dev' or 'prod'). 
-+ ```account_name```: If an enterprise customer, this is your subscription account name (case-sensitive).
 
+### Premium APIs
 For example, if you are working with the premium 30-day search API and an environment named 'dev', the settings should be:
 
 ```
 options:
   search_type: premium
   archive: 30day
-  
-labels:
-  environment: dev
 ```  
 
+### Enterprise APIs
 If you are working with the enterprise full-archive search API, have an account name of 'ThinkSnow' and a search label of 'prod', the settings should be:
 
 ```
 options:
   search_type: enterprise
   archive: fullarchive
-  
-labels:
-  environment: prod
-  account_name: ThinkSnow
 ```  
 
 ## Setting credentials <a id="credentials" class="tall">&nbsp;</a>
@@ -95,6 +90,7 @@ You specify credentials  in the YAML configuration file (```./config/config.yaml
 
 + ```environment```: Either the premium environment name you selected with the [dev portal](https://developer.twitter.com/en/dashboard), or your enterprise search label (typically 'dev' or 'prod'). 
 + ```account_name```: If an enterprise customer, this is your subscription account name (case-sensitive).
+
 
 For example, if you are working with premium APIs, your need to supply your Bearer Token in the ```app_token``` field:
 
@@ -111,7 +107,7 @@ auth:
   password: N0tMyRe4lP455w0rd
 ```  
 
-## Setting Search API Endpoint
+## Configuring custom URL/Endpoint <a id="urls" class="tall">&nbsp;</a>
 
 Every user of a Twitter premium or enterprise API is provided a unique URL, their own custom *endpoint*. These URLs are made unique by including one or two *tokens* that are specified by the client when setting up their account. For premium APIs this 
 
