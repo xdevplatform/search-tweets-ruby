@@ -36,17 +36,18 @@ Jump to:
   + [Command-line arguments](#arguments)
   + [Specifying search period start and end times](#specifying-times)
   + [Rules files](#rules)
-+ [Other details](#other)
++ [Next steps](#next)
 --------------------
 
 ## Getting started <a id="getting-started" class="tall">&nbsp;</a>
 
 Four fundamental steps need to be taken to start using this search client: 
 
-1) Establish access to the API(s) of choice
-2) Have your API credentials on hand
+1) Establish access to the API(s) of choice.
+2) Have your API credentials on hand.
 3) Get this Ruby app running in your environment. 
-4) Configure client and start making search requests.
+4) Configure client. 
+5) Use command-line arguments to start making search requests.
 
 + Establish access to API:
   + For premium APIs, you can start that process at https://developer.twitter.com/en/dashboard.
@@ -62,17 +63,15 @@ Four fundamental steps need to be taken to start using this search client:
   + Test it out by running ```$ruby search-app.rb -h```. You should see a help menu. 
 
 + Configure the client.
-  + Specify the search API to request from, provide API credentials, and set app options. These are stored in a configuration YAML file.
-  + Review how to pass in search request options via the command-line. Search filters are specified with the ```-r``` parameter, and search period start and end times are specified with the ```-s``` and ```-e``` parameters. Some common patterns:
+ + Specify the search API to request from, provide API credentials, and set app options. These are stored in a configuration YAML file.
+
++ Use command-line arguments to start making search requests
+
+   + Review how to pass in search request options via the command-line. Search filters are specified with the ```-r``` parameter, and search period start and end times are specified with the ```-s``` and ```-e``` parameters. Some common patterns:
    + ```-r "from:TwitterDev" -s 14d``` --> Request all Tweets posted by the @TwitterDev account over the past 14 days.
    + ```-r "snow profile_region:co has:media" -s "2017-12-01 06:00" -e "2017-12-02 06:00" -x 3``` --> Request Tweets matching the specified rule, but stop after three requests. Set the search period to December 1, 2017 in the MST (UTC−6:00) timezone. This example rule translates to "match Tweets with keyword 'snow', posted by someone who calls Colorado home, and had a photo, video, or GIF attached 'natively' with Twitter app."
   + Make your first request: ```$ruby search-app.rb -r "from:TwitterDev -s 14d" -x 1```. 
   + Look for API JSON responses in app's standard out or outbox. 
-
-### Other important documentation and resources:
-+ Learn about building search filters: https://developer.twitter.com/en/docs/tweets/rules-and-filtering/guides/using-premium-operators
-+ Review the list of premium operators: https://developer.twitter.com/en/docs/tweets/search/guides/premium-operators
-+ Jump into the API references: [Premium search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/premium-search), [Enterprise search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
 
 ## Selecting search API <a id="selecting-api" class="tall">&nbsp;</a>
 
@@ -299,12 +298,17 @@ For example, you can pass in a JSON rules file located at ./rules/my-snow-rules.
 ```$ruby search_app.rb -r "./rules/my-snow-rules.json" -s 7d" -x 1```  
 
 
-## Other details <a id="other" class="tall">&nbsp;</a>
+## Next steps <a id="next" class="tall">&nbsp;</a>
 
-This third iteration is based on a previous version developed for the enterprise full-archive search API. That client was in turn based on the initial example developed for the enterprise 30-day search API.
++ Learn about building search filters: https://developer.twitter.com/en/docs/tweets/rules-and-filtering/guides/using-premium-operators
++ Review the list of premium operators: https://developer.twitter.com/en/docs/tweets/search/guides/premium-operators
++ Jump into the API references: [Premium search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/premium-search), [Enterprise search APIs](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
+
 
 
 ### Updates 
+
+This third iteration is based on a previous version developed for the enterprise full-archive search API. That client was in turn based on the initial example developed for the enterprise 30-day search API.
 
 This iteration has the following updates from the [full-archive version](https://github.com/gnip/gnip-fas-ruby):
 
