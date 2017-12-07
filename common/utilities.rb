@@ -15,13 +15,13 @@ module Utilities
 		return time.year.to_s + sprintf('%02i', time.month) + sprintf('%02i', time.day) + sprintf('%02i', time.hour) + sprintf('%02i', time.min)
 	end
 
-	def get_date_object(time_string)
+	def Utilities.get_date_object(time_string)
 		time = Time.new
 		time = Time.parse(time_string)
 		return time
 	end
 
-	def numeric?(object)
+	def Utilities.numeric?(object)
 		true if Float(object) rescue false
 	end
 
