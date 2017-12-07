@@ -11,8 +11,8 @@ class TweetSearch
 	require_relative '../common/requester'
 	require_relative '../common/rules'
 	require_relative '../common/url_maker'
-	require_relative '../common/datastore'
 	require_relative '../common/utilities.rb' #Mixin code.
+	#require_relative '../common/datastores/datastore'
 	
 	API_ACTIVITY_LIMIT = 500 #Limit on the number of activity IDs per Rehydration API request, can be overridden.
 
@@ -68,7 +68,7 @@ class TweetSearch
 		@requester = Requester.new #HTTP helper class.
 		@url_maker = URLMaker.new #Abstracts away the URL details... 
 		@rules = PtRules.new #Can load rules from configuration files.
-		@datastore = Datastore.new
+		#@datastore = Datastore.new
 
 		@exit_after = nil
 		@request_count = 0
@@ -114,6 +114,7 @@ class TweetSearch
 =end
 
 		@write_mode = config['options']['write_mode']
+		@counts_to_standard_out = config['options']['counts_to_standard_out']
 
 		begin
 			@out_box =  Utilities.checkDirectory(config['options']['out_box'])
@@ -320,8 +321,6 @@ class TweetSearch
 
 			puts "ERROR occurred: #{response.code}  #{response.message} --> #{response.body}"
 		end
-
-		@write_mode = "files"
 
 		if @write_mode == "files" #write the file.
 
