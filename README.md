@@ -1,3 +1,10 @@
+```
+[] Add ENV credential options, move details to new Configuration class.
+[] Add url option, to simply configuration? Current design makes switching APIs easier?
+```
+
+-------------------------------------
+
 # Ruby Tweet search client
 
 This Ruby client is written to work with the Twitter premium and enterprise versions of Tweet Search.  This client is a command-line app that supports the following features:
@@ -5,7 +12,8 @@ This Ruby client is written to work with the Twitter premium and enterprise vers
 + Works with:
 	+ Premium Search Tweets: 30-day API
 	+ Enterprise 30-Day Search API
-	+ Enterprise Full-Archive API+ Can manage an array of filters, making requests for each.
+	+ Enterprise Full-Archive API
++ Can manage an array of filters, making requests for each.
 + Returns total count for entire request period.
 + Supports flexible ways to specify search period. E.g., ```-s 7d``` specifies the past week. Other patterns such as ```YYYY-MM-DD HH:mm```, standard Twitter ISO timestamps, and the enterprise ```YYYYMMDDhhmm``` pattern are also supported.
 + Writes to files or standard out. When writing files, one file is written for every API response. File names are based on query syntax, and are serialized. (Writing to a datastore... coming soon?)
@@ -78,6 +86,54 @@ labels:
   account_name: ThinkSnow
 ```  
 
+## Setting credentials <a id="credentials" class="tall">&nbsp;</a>
+
+You specify credentials  in the YAML configuration file (```./config/config.yaml``` by default) with the following settings:
+
++ ```search_type```: Set to either ```premium``` or ```enterprise```.
++ ```archive```: Set to either ```30day``` or ```fullarchive```.
+
++ ```environment```: Either the premium environment name you selected with the [dev portal](https://developer.twitter.com/en/dashboard), or your enterprise search label (typically 'dev' or 'prod'). 
++ ```account_name```: If an enterprise customer, this is your subscription account name (case-sensitive).
+
+For example, if you are working with premium APIs, your need to supply your Bearer Token in the ```app_token``` field:
+
+```
+auth:
+  app_token:  AAAAA5n0w5n0w5n0wMyL0ngBe4r4rT0k4n
+```  
+
+If you are working with enterprise APIs, you need to supply your user name as the ```app_token```, and your password:
+
+```
+auth:
+  app_token: username@mycompany.com  
+  password: N0tMyRe4lP455w0rd
+```  
+
+## Setting Search API Endpoint
+
+Every user of a Twitter premium or enterprise API is provided a unique URL, their own custom *endpoint*. These URLs are made unique by including one or two *tokens* that are specified by the client when setting up their account. For premium APIs this 
+
+### Premium APIs
+With premium APIs, there is one token and that is the name given the development environment set up [https://developer.twitter.com/en/dashboard](https://developer.twitter.com/en/dashboard). If you named you development environment to 'dev', then your client configuration file would look like:
+
+```
+labels:
+  environment: dev   
+```  
+
+### Enterprise APIs
+
+With enterprise APIs, there are two tokens. The first is your enterprise account name, which is established when API access is set up by Twitter (and is case-sensitive). The second is the 'label' assigned to the search endpoint, which can be thought of as a name for the environment you want to work in. Most enterprise systems operate with both development and production environments. If you were working on your production system (with a label of 'prod'), then your client configuration file would look like:
+
+```
+labels:
+  environment: prod  
+  account_name: myAcccountName  
+```
+
+
 ## Example calls <a id="example-calls" class="tall">&nbsp;</a>
 
 This command-line app supports a simple set of arguments with which the filter and search period are specified. Important application configuration details are stored in a YAML file. 
@@ -125,6 +181,9 @@ labels:
   account_name:      #Enterprise only. 
 
 ```
+
+
+
 
 ### Command-line arguments <a id="arguments" class="tall">&nbsp;</a>
 
