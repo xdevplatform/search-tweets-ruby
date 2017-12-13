@@ -88,9 +88,16 @@ if __FILE__ == $0  #This script code is executed when running this file.
     oSearch.rules.rules = Array.new
 
     #Provided config file, which can provide auth, URL metadata, and app options.
-    if !$config.nil?
-        oSearch.get_system_config($config)
+    if $config.nil?
+			$config = "config/config.yaml" #Set default.
     end
+    
+    if !File.exists?($config) 
+			puts "Can not find configuration file. Quitting."
+			exit
+    end
+
+    oSearch.get_system_config($config)
 
     #So, we got what we got from the config file, so process what was passed in.
     #Initial "gate-keeping" on what we have been provided.  Enough information to proceed?
