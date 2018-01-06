@@ -1,3 +1,5 @@
+#Collection of general helper methods.
+
 module Utilities
 
 	#-----------------------------------------------------
@@ -25,7 +27,7 @@ module Utilities
 		true if Float(object) rescue false
 	end
 
-	#Takes a variety of string inputs and returns a standard PowerTrack YYYYMMDDHHMM timestamp string.
+	#Takes a variety of string inputs and returns a standard Twitter Search/PowerTrack YYYYMMDDHHMM timestamp string.
 	def Utilities.set_date_string(input)
 
 		now = Time.new

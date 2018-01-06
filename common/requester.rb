@@ -7,8 +7,6 @@
 # Enterprise 30-Day Search API
 # Enterprise Full-Archive Search API
 
-# [] Following implementation may be useful as pseudo-code for other languages.
-
 #=======================================================================================================================
 
 class Requester

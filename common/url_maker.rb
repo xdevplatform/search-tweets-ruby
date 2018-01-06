@@ -1,17 +1,19 @@
+=begin
+Helper function for building URLs.
+
+Premium Search example:
+	labels = {}
+	labels['label'] = 'dev'
+	search-app.countURL = URLMaker.getSearchCountURL('premium', labels)
+
+Enterprise Search example:
+	labels = {}
+	labels['account_name'] = 'thinksnow'
+	labels['label'] = 'dev'
+	search-app.countURL = URLMaker.getSearchCountURL('enterprise', labels)
+=end
+
 class URLMaker
-
-	#Helper function for building URLs.
-	
-	#Premium Search example:
-	#labels = {}
-	#labels['label'] = 'dev'
-	#search-app.countURL = URLMaker.getSearchCountURL('premium', labels)
-
-	#Enterprise Search example:
-	#labels = {}
-	#labels['account_name'] = 'thinksnow'
-	#labels['label'] = 'dev'
-	#search-app.countURL = URLMaker.getSearchCountURL('enterprise', labels)
 
 	
 	#CONSTANTS

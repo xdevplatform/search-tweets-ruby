@@ -1,11 +1,33 @@
-#A command-line wrapper to the fa_search class.
-#Uses the 'optparse' gem for parsing command-line options.  For better or worse...
-#The code here focuses on parsing command-line options, config files, then calling get_data or get_counts methods.
+'''
+A command-line wrapper to search-tweets.rb, the SearchTweets class. The code here focuses on parsing command-line
+options, loading configuration details, and then calling get_data or get_counts methods.
 
-#Loads up rules, and loops through them.
-#Writes to standard-out, files or to a database.
+* Uses the optparse gem for parsing command-line options.
+* Currently loads all configuration details from a config.yaml file
+* A next step could be to load in authentication keys via local environment vars.
 
-#Example usage: see README.md
+This app currently has no logging, and instead just "puts" statements to system out. The /common/app_logger
+class would be a somewhat simple way to add logging.
+
+Loads up rules, and loops through them. At least one rule is required. One rule can be passed in via the command-line,
+or a file path can be provided which contains a rule array in JSON or yaml.
+Writes to standard-out or files. Soon to a data store.
+
+-------------------------------------------------------------------------------------------------------------------
+Example command-lines
+
+    #Pass in two files, the SearchTweets app config file and a Rules file.
+    # $ruby ./search-api.rb -c "./SearchConfig.yaml" -r "./rules/mySearchRules.yaml"
+    # $ruby ./search-api.rb -c "./SearchConfig.yaml" -r "./rules/mySearchRules.json"
+
+    #Typical command-line usage.
+    # Passing in single filter/rule and ISO formatted dates. Otherwise running with defaults.
+    # $ruby ./search-api.rb -r "rain OR weather (profile_region:colorado)" -s "2013-10-18 06:00" -e "2013-10-20 06:00"
+
+    #Get minute counts.  Returns JSON time-series of minute, hour, or day counts.
+    # $ruby ./search_api.rb -l -d "minutes" -r "rain OR weather (profile_region:colorado)" -s "2013-10-18 06:00" -e "2013-10-20 06:00"
+-------------------------------------------------------------------------------------------------------------------
+'''
 
 require_relative "./lib/search-tweets.rb"
 require_relative "./common/utilities.rb"
@@ -16,36 +38,7 @@ if __FILE__ == $0  #This script code is executed when running this file.
     require 'optparse'
     require 'base64'
 
-    #-------------------------------------------------------------------------------------------------------------------
-    #Example command-lines
-
-    #Options:
-    #       Pass in configuration and rules files.
-    #       Pass in everything on command-line.
-    #       Pass in configuration file and all search parameters.
-    #       Pass in configuration parameters and rules file.
-
-    #Pass in two files, the Gnip Search API config file and a Rules file.
-    # $ruby ./search-api.rb -c "./SearchConfig.yaml" -r "./rules/mySearchRules.yaml"
-    # $ruby ./search-api.rb -c "./SearchConfig.yaml" -r "./rules/mySearchRules.json"
-
-    #Typical command-line usage.
-    # Passing in single filter/rule and ISO formatted dates. Otherwise running with defaults.
-    # $ruby ./search-api.rb -r "rain OR weather (profile_region:colorado)" -s "2013-10-18 06:00" -e "2013-10-20 06:00"
-
-    #Get minute counts.  Returns JSON time-series of minute, hour, or day counts.
-    # $ruby ./search_api.rb -l -d "minutes" -r "rain OR weather (profile_region:colorado)" -s "2013-10-18 06:00" -e "2013-10-20 06:00"
-
-    #-------------------------------------------------------------------------------------------------------------------
-
     OptionParser.new do |o|
-
-        #We need either a config file AND a rule parameter (which can be a single rule passed in, or a rules file)
-        # OR
-        #100% parameters, with no config file:
-        # Mandatory: username, password, address/account, rule
-        # Options: start(defaults to Now - 30 days), end (defaults to Now), tag,
-        # look, duration (defaults to minute), maxResults (defaults to 100)
 
         #Passing in a config file.... Or you can set a bunch of parameters.
         o.on('-c CONFIG', '--config', 'Configuration file (including path) that provides account and option selections.
@@ -84,7 +77,7 @@ if __FILE__ == $0  #This script code is executed when running this file.
     end
 
     #Create a Tweet Search object.
-    oSearch = TweetSearch.new()
+    oSearch = SearchTweets.new()
     oSearch.rules.rules = Array.new
 
     #Provided config file, which can provide auth, URL metadata, and app options.
@@ -100,12 +93,12 @@ if __FILE__ == $0  #This script code is executed when running this file.
     oSearch.get_system_config($config)
 
     #So, we got what we got from the config file, so process what was passed in.
-    #Initial "gate-keeping" on what we have been provided.  Enough information to proceed?
-    #Anything on command-line overrides configuration setting...
+    #Provides initial "gate-keeping" on what we have been provided. Enough information to proceed?
+    #Anything on command-line overrides configuration setting... 
 
     error_msgs = Array.new
 
-    oSearch.set_requester
+    oSearch.set_requester #With config details, set the HTTP stage for making requests. 
 
     #We need to have at least one rule.
     if !$rule.nil?
@@ -119,8 +112,6 @@ if __FILE__ == $0  #This script code is executed when running this file.
             if extension == "json"
                 oSearch.rules.loadRulesYAML(oSearch.rules_file)
             end
-
-
         else
             rule = {}
             rule["value"] = $rule
@@ -138,8 +129,7 @@ if __FILE__ == $0  #This script code is executed when running this file.
         rule = oSearch.rules.rules
         rule[0]["tag"] = $tag
     end
-
-    #Look is optional.
+   
     #Duration is optional, defaults to "hour" which is handled by Search API.
     #Can only be "minute", "hour" or "day".
     if !$duration.nil?
@@ -158,10 +148,7 @@ if __FILE__ == $0  #This script code is executed when running this file.
     #    Or they can be in the rules file (but overridden on the command-line).
     #    start_date < end_date, and end_date <= NOW.
 
-    #We need to end up with PowerTrack timestamps in YYYYMMDDHHmm format.
-    #If numeric and length = 12 then we are all set.
-    #If ISO format and length 16 then apply o.gsub!(/\W+/, '')
-    #If ends in m, h, or d, then do some time.add math
+    #We need to end up with Twitter Search/PowerTrack timestamps in YYYYMMDDHHmm format.
 
     #Handle start date.
     #First see if it was passed in

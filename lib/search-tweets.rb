@@ -1,8 +1,8 @@
-class TweetSearch
+class SearchTweets
 
 	require 'json'
 	require 'yaml' #Used for configuration files.
-	require 'base64'
+	require 'base64' #Needed is managing encrypted passwords.
 	require 'fileutils'
 	require 'zlib'
 	require 'time'
@@ -14,14 +14,14 @@ class TweetSearch
 	require_relative '../common/utilities.rb' #Mixin code.
 	#require_relative '../common/datastores/datastore'
 	
-	API_ACTIVITY_LIMIT = 500 #Limit on the number of activity IDs per Rehydration API request, can be overridden.
+	API_ACTIVITY_LIMIT = 500 #Limit on the number of Tweet IDs per API request, can be overridden.
 
 	attr_accessor :search_type,
 	              :archive,
-	              :requester, #Knows RESTful HTTP requests.
+	              :requester, #Object that knows RESTful HTTP requests.
 	              :urlData, #Search uses two different end-points...
 	              :urlCount,
-	              :url_maker, #Builds request URLs.
+	              :url_maker, #Object that builds request URLs.
 
 	              # Search request parameters	
 	              :from_date, :to_date, #'Study' period.
@@ -44,10 +44,10 @@ class TweetSearch
 	              :in_box,
 	              :out_box,
 	              :compress_files,
-	              :datastore, #Knows how to store Tweets.
+	              #:datastore, #Object that knows how to store Tweets.
 	              
-	              :exit_after,
-	              :request_count,
+	              :exit_after,       #Supports user option to quit after x requests.
+	              :request_count,    #Tracks how many requests have been made.
 	              :request_timestamp #Used for self-throttling of request rates. 
 
 	def initialize()
@@ -58,7 +58,7 @@ class TweetSearch
 		@labels = {}
 		@auth = {}
 		
-		@interval = 'day'
+		@interval = 'hour'
 		@max_results = API_ACTIVITY_LIMIT
 		@out_box = './outbox'
 		@write_mode = 'files'
@@ -73,9 +73,7 @@ class TweetSearch
 		@exit_after = nil
 		@request_count = 0
 		@request_timestamp = Time.now - 1 #Used to self-throttle requests.
-
 	end
-
 
 	#Load in the configuration file details, setting many object attributes.
 	def get_system_config(config_file)
@@ -103,6 +101,7 @@ class TweetSearch
 		end
 
 =begin
+      #Supporting encrypted passwords? 
 			if !config["account"]["password"].nil? or !config["account"]["password_encoded"].nil?
 				@password_encoded = config["account"]["password_encoded"]
 
@@ -128,7 +127,7 @@ class TweetSearch
 			@compress_files = false
 		end
 
-
+=begin
 		if @write_mode == 'database' #Get database connection details.
 			db_host = config['database']['host']
 			db_port = config['database']['port']
@@ -139,6 +138,8 @@ class TweetSearch
 			#@datastore = Database.new(db_host, db_port, db_schema, db_user_name, db_password)
 			#@datastore.connect
 		end
+=end
+
 	end
 
 	def set_requester
@@ -212,11 +213,13 @@ class TweetSearch
 		filename
 	end
 
-	#Builds a hash and generates a JSON string.
-	#Defaults:
-	#@interval = "hour"   #Set in constructor.
-	#@max_results = API_ACTIVITY_LIMIT   #Set in constructor.
-
+	'''
+	Builds and returns a request hash.
+	Defaults:
+	     @interval = "hour"   #Set in constructor.
+	     @max_results = API_ACTIVITY_LIMIT   #Set in constructor.
+  '''
+	
 	def build_request(rule, from_date=nil, to_date=nil)
 		request = {}
 
@@ -272,8 +275,6 @@ class TweetSearch
 	def get_count_total(count_response)
 
 		count_total = 0
-
-		#puts count_response
 
 		contents = JSON.parse(count_response)
 		results = contents["results"]
@@ -381,6 +382,12 @@ class TweetSearch
 		rescue
 			sleep 5
 			response = @requester.POST(data) #try again
+		end
+		
+		if response.code.to_i > 201
+			puts "#{response.body}"
+			puts "Quitting"
+			exit
 		end
 
 		#Prepare to convert Search API JSON to hash.
