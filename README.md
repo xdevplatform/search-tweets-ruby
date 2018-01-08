@@ -153,7 +153,7 @@ The following call specifies a non-default configuration file, and illustrates o
 
 The following call illustrates how to make a 'counts' request with the -l parameter ("l" is for "look before you leap") and passing in a rule JSON file (YAML format also supported). These rules files can contain multiple rules. 
 
-```$ruby ./search-app.rb -c "./config/my_config.yaml" -r "./rules/my_curated_rule.json" -s 12h``` -l
+```$ruby ./search-app.rb -c "./config/my_config.yaml" -r "./rules/my_curated_rule.json" -s 12h -l ```
 
 
 ## Fundamental details <a id="details" class="tall">&nbsp;</a>
@@ -187,14 +187,10 @@ labels:
 
 ```
 
-
-
-
 ### Command-line arguments <a id="arguments" class="tall">&nbsp;</a>
 
 Once you have the configuration file set up, you can start making requests. Search API request parameters (identical across all premium and enterprise APIs) are specified as arguments via the command line. 
 
-[] TODO: update anchors.
 For making Tweet requests ('data') see our request parameter documentation [HERE](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
 For making *number of Tweets* ('counts') see our request parameter documentation [HERE](https://developer.twitter.com/en/docs/tweets/search/api-reference/enterprise-search).
 
