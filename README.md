@@ -118,7 +118,7 @@ auth:
 
 ## Configuring custom URL/Endpoint <a id="urls" class="tall">&nbsp;</a>
 
-Every user of a Twitter premium or enterprise API is provided a unique URL, their own custom *endpoint*. These URLs are made unique by including one or two *tokens* that are specified by the client when setting up their account. For premium APIs this 
+Every user of a Twitter premium or enterprise API is provided a unique URL, their own custom *endpoint*. These URLs are made unique by including one or two *tokens* that are specified by the client when setting up their account. 
 
 ### Premium APIs
 With premium APIs, there is one token and that is the name given the development environment set up [https://developer.twitter.com/en/dashboard](https://developer.twitter.com/en/dashboard). If you named you development environment to 'dev', then your client configuration file would look like:
