@@ -423,6 +423,7 @@ class SearchTweets
 					new_file.write(api_response.to_json)
 				end
 			end
+=begin #Data store support coming soon?
 		elsif @write_mode == "datastore" #store in database.
 			puts "Storing Tweet data in data store..."
 
@@ -434,6 +435,7 @@ class SearchTweets
 				#p activity
 				@datastore.storeTweet(tweet.to_json)
 			end
+=end
 		else #Standard out
 			results = []
 			results = api_response['results']
