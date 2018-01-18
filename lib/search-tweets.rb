@@ -2,7 +2,7 @@ class SearchTweets
 
 	require 'json'
 	require 'yaml' #Used for configuration files.
-	require 'base64' #Needed is managing encrypted passwords.
+	require 'base64' #Needed if managing encrypted passwords.
 	require 'fileutils'
 	require 'zlib'
 	require 'time'
