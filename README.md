@@ -318,15 +318,6 @@ This iteration has the following updates from the [full-archive version](https:/
 
 
 
-=============================================
-To-dos:
-
-```
-[] Add ENV credential options, move details to new Configuration class?
-[] Add url option, to simply configuration? Current design makes switching APIs easier?
-[] Add error handling for start-up/config issues. Currently, once the app is set-up, error handling is OK. 
-[x] Fix needing to specify config path. Default is not working.
-```
 
 
 
