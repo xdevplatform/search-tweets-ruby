@@ -79,7 +79,9 @@ For example, if you are working with the premium 30-day search API and an enviro
 options:
   search_type: premium
   archive: 30day
+  max_results: 500  #Premium sandbox environments (free access) should have this set to 100.
 ```  
+*Note that if you are using a premium 'sandbox' environment, be sure to set the "max_results" field to 100.*
 
 ### Enterprise APIs
 If you are working with the enterprise full-archive search API, have an account name of 'ThinkSnow' and a search label of 'prod', the settings should be:
@@ -171,6 +173,7 @@ Here are the default configuration settings with descriptions of each option:
 options:
   search_type: premium # or enterprise
   archive: 30day # or fullarchive
+  max_results: 500 # If you are using a premium *sandbox* environment, the maximum is 100.
   write_mode: standard-out # options: files, so/standard/standard-out --> Store activities in local files or print to system out?
   out_box: ./output # Folder where retrieved data goes.
   counts_to_standard_out: true # Always write 'counts' endpoint responses to standard out. Force to file with '-w' option.
