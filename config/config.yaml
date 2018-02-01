@@ -6,6 +6,7 @@
 options:
   search_type: premium # or enterprise
   archive: 30day # or fullarchive
+  max_results: 100 # If you are using a premium *sandbox* environment, the maximum is 100.
   write_mode: standard-out # options: files, so/standard/standard-out.
   out_box: ./output # Folder where retrieved data goes.
   counts_to_standard_out: true # Always write 'counts' endpoint responses to standard out. Force to file with '-w' option.
