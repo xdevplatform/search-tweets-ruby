@@ -14,7 +14,8 @@ class SearchTweets
 	require_relative '../common/utilities.rb' #Mixin code.
 	#require_relative '../common/datastores/datastore'
 	
-	API_ACTIVITY_LIMIT = 500 #Limit on the number of Tweet IDs per API request, can be overridden.
+	API_ACTIVITY_LIMIT = 500 #Limit on the number of Tweet IDs per API request, can be overridden. 
+	                         #If using a premium 'sandbox' environment, the limit is 100.
 
 	attr_accessor :search_type,
 	              :archive,
@@ -84,6 +85,7 @@ class SearchTweets
 		
 		@search_type = config['options']['search_type']
 		@archive = config['options']['archive']
+		@max_results = config['options']['max_results']
 
 		#'Label' details needed for establishing endpoint URI.
 		@labels[:environment] = config['labels']['environment'] #Required.
