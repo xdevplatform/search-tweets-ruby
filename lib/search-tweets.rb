@@ -12,8 +12,7 @@ class SearchTweets
 	require_relative '../common/rules'
 	require_relative '../common/url_maker'
 	require_relative '../common/utilities.rb' #Mixin code.
-	#require_relative '../common/datastores/datastore'
-	
+		
 	API_ACTIVITY_LIMIT = 500 #Limit on the number of Tweet IDs per API request, can be overridden. 
 	                         #If using a premium 'sandbox' environment, the limit is 100.
 
@@ -45,8 +44,7 @@ class SearchTweets
 	              :in_box,
 	              :out_box,
 	              :compress_files,
-	              #:datastore, #Object that knows how to store Tweets.
-	              
+                      
 	              :exit_after,       #Supports user option to quit after x requests.
 	              :request_count,    #Tracks how many requests have been made.
 	              :request_timestamp #Used for self-throttling of request rates. 
@@ -69,7 +67,6 @@ class SearchTweets
 		@requester = Requester.new #HTTP helper class.
 		@url_maker = URLMaker.new #Abstracts away the URL details... 
 		@rules = PtRules.new #Can load rules from configuration files.
-		#@datastore = Datastore.new
 
 		@exit_after = nil
 		@request_count = 0
@@ -129,19 +126,6 @@ class SearchTweets
 			@compress_files = false
 		end
 
-=begin
-		if @write_mode == 'database' #Get database connection details.
-			db_host = config['database']['host']
-			db_port = config['database']['port']
-			db_schema = config['database']['schema']
-			db_user_name = config['database']['user_name']
-			db_password = config['database']['password']
-
-			#@datastore = Database.new(db_host, db_port, db_schema, db_user_name, db_password)
-			#@datastore.connect
-		end
-=end
-
 	end
 
 	def set_requester
@@ -151,10 +135,7 @@ class SearchTweets
 		@requester.password = @auth[:password] #HTTP class can decrypt password.
 		@requester.headers = @auth[:headers]
 
-		#@urlData = @requester.getFaSearchURL(@account_name, @environment)
 		@urlData = @url_maker.getDataURL(@search_type, @archive, @labels)
-
-		#@urlCount = @requester.getFaSearchCountURL(@account_name, @environment)
 		@urlCount = @url_maker.getCountURL(@search_type, @archive, @labels)
 
 		#Default to the "data" url.
@@ -167,7 +148,6 @@ class SearchTweets
 		end
 	end
 
-	# [] TODO: needs to check for existing file name, and serialize if needed.
 	# Payloads are descending chronological, first timestamp is end_time, last is start_time.  Got it?
 	def get_file_name(rule, results)
 
@@ -197,7 +177,6 @@ class SearchTweets
 		return filename
 	end
 
-	# TODO: needs to check for existing file name, and serialize if needed.
 	# Payloads are descending chronological, first timestamp is end_time, last is start_time.  Got it?
 	def get_counts_file_name(rule, results)
 
@@ -425,19 +404,7 @@ class SearchTweets
 					new_file.write(api_response.to_json)
 				end
 			end
-=begin #Data store support coming soon?
-		elsif @write_mode == "datastore" #store in database.
-			puts "Storing Tweet data in data store..."
 
-			results = []
-			results = api_response['results']
-
-			results.each do |tweet|
-
-				#p activity
-				@datastore.storeTweet(tweet.to_json)
-			end
-=end
 		else #Standard out
 			results = []
 			results = api_response['results']
@@ -465,8 +432,8 @@ class SearchTweets
 			time_span = "#{start_time} to now.  "
 		end
 
-		#TODO: puts "Retrieving counts for rule: #{rule}"
-		#TODO: puts "For time period: #{time_span}..."
+		puts "Retrieving counts for rule: #{rule}"
+		puts "For time period: #{time_span}..."
 
 		while !next_token.nil? do
 
@@ -485,8 +452,7 @@ class SearchTweets
 			end
 		end
 
-		#TODO: puts "Total counts: #{@count_total}"
-		puts "#{@count_total}"
+		puts "Total counts: #{@count_total}"
 
 		#puts "#{time_span} #{@count_total}"
 		#puts "#{time_span[4..5]}/#{time_span[0..3]} #{@count_total}" #useful for creating monthly plots
