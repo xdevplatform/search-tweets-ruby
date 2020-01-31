@@ -199,7 +199,7 @@ class SearchTweets
 	Defaults:
 	     @interval = "hour"   #Set in constructor.
 	     @max_results = API_ACTIVITY_LIMIT   #Set in constructor.
-  '''
+    '''
 	
 	def build_request(rule, from_date=nil, to_date=nil)
 		request = {}
