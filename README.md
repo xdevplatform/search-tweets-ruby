@@ -1,6 +1,10 @@
 # Ruby Tweet search client
 
-This Ruby client is written to work with the Twitter premium and enterprise versions of Tweet Search.  This client is a command-line app that supports the following features:
+This Ruby client is written to work with the Twitter premium and enterprise versions of Tweet Search.  
+
+**Note:** If you are looking for a refreshed version that works with Twitter Developer Labs [Recent search endpoint v2](https://developer.twitter.com/en/docs/labs/recent-search/overview), head on over to the "labs" branch.
+
+This client is a command-line app that supports the following features:
 
 + Works with:
 	+ Premium Search Tweets API: 30-day search endpoint
