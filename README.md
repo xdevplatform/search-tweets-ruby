@@ -13,7 +13,7 @@ Note: If you are looking for the original version that works with premium and en
 + By default, the script writes Tweets to standard out, and can also write to files or return either a hash or JSON string.
 + Flexible usage within a Ruby program.
 + Supports "polling" use cases.  
-+ **Note:** the Labs Recent search endpoint *does not* support the ```counts``` endpoint. Future versions of search endpoints will.
++ **Note:** the Labs Recent search endpoint *does not* support the ```counts``` endpoint. 
 
 ----------------
 Jump to:
@@ -147,23 +147,26 @@ Usage: search [options]
 ### Command-line options for ```polling.rb``` script:
 
 ```
-Usage: polling [options]
+Usage: search [options]
     -c, --config CONFIG              Configuration file (including path) that provides account and option selections.
                                        Config file specifies which search endpoint, includes credentials, and sets app options.
     -q, --query QUERY                Maps to API "query" parameter.  Either a single query passed in, or a file containing either a
-                                   YAML or JSON array of queries/rules.
+                                   YAML or JSON array of queries.
     -s, --start-time START           UTC timestamp for beginning of Search period (maps to "fromDate").
                                          Specified as YYYYMMDDHHMM, \"YYYY-MM-DD HH:MM\", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.
-    -i, --since_id SINCEID           All matching Tweets since this Tweet ID was created (exclusive).
-    -p, --poll-interval POLLINTERVAL Polling interval in minutes. Default is 5 minutes.
+    -e, --end-time END               UTC timestamp for ending of Search period (maps to "toDate").
+                                      Specified as YYYYMMDDHHMM, \"YYYY-MM-DD HH:MM\", YYYY-MM-DDTHH:MM:SS.000Z or use ##d, ##h or ##m.
+    -p, --poll                       Sets "polling" mode.
+    -i, --since-id SINCEID           All matching Tweets since this Tweet ID was created (exclusive).
+    -u, --until-id UNTILID           All matching Tweets up until this ID was created (exclusive).
     -m, --max MAXRESULTS             Specify the maximum amount of Tweets results per response (maps to "max_results"). 10 to 100, defaults to 10.
-    -f, --fields FIELDS              Tweet attributes of interest (comma-delimited) Defaults to "id,created_at,author_id,text". See https://developer.twitter.com/en/docs/labs/recent-search/api-reference/get-recent-search for details on available fields.
     -x, --exit EXIT                  Specify the maximum amount of requests to make. "Exit app after this many requests."
-    -w, --write WRITE                'files', 'standard-out' (or 'so' or 'standard').
+    -w, --write WRITE                'files', 'hash', standard-out' (or 'so' or 'standard').
     -o, --outbox OUTBOX              Optional. Triggers the generation of files and where to write them.
-    -t, --tag TAG                    Optional. Gets included in the  payload if included. Alternatively, rules files can contain tags.
+    -t, --tag TAG                    Optional. Gets included in the Tweet payload if included. Also, queries files can contain tags.
     -v, --verbose                    Optional. Turns verbose messaging on.
     -h, --help                       Display this screen.
+
 ```
 
 ## Example script commands <a id="example-calls" class="tall">&nbsp;</a>
