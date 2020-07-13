@@ -24,8 +24,8 @@ Writes to standard-out or files.
 Example command-lines
 
     #Pass in two files, the SearchTweets app config file and a Rules file.
-    # $ruby ./search.rb -c "./config/.config.yaml" -q "./queries/myQueries.yaml"
-    # $ruby ./search.rb -c "./config/.config.yaml" -q "./queries/myQueries.json"
+    # $ruby ./search.rb -c "./config/..config.yaml" -q "./queries/myQueries.yaml"
+    # $ruby ./search.rb -c "./config/..config.yaml" -q "./queries/myQueries.json"
 
     #Typical command-line usage.
     # Passing in single query and ISO formatted dates. Otherwise running with defaults.

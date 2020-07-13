@@ -1,0 +1,29 @@
+# Any corresponding command-line arguments override these. These establish default configuration details.
+# Rules/filters are specified via command-line, or with a rules JSON or YAML file.
+
+#Client options.
+
+# Any corresponding command-line arguments override these. This establish default configuration details.
+# Queries are specified via command-line, or with a JSON or YAML file.
+
+#Client options.
+options:
+  #Default API request parameters.
+  max_results: 10 #For Labs this max is 100. Default is 10.
+
+  expansions: author_id,referenced_tweets.id,attachments.media_keys,geo.place_id
+  tweet.fields: attachments,author_id,created_at,entities,geo,public_metrics,referenced_tweets,source
+  user.fields: created_at,description,location,name,pinned_tweet_id,public_metrics,url,username,verified
+  media.fields: media_key,public_metrics,type,url
+  place.fields: country_code,full_name,geo,id,name,place_type
+  poll.fields: options
+
+  write_mode: so  # options: json, files, so/standard/standard-out, hash --> Store Tweets in local files or print to system out?
+  out_box: ./output # Folder where retrieved data goes.
+  max_tweets_in_returned_hash: 10000
+
+#Credentials. Insert your Consumer Key and Secret, OR your Bearer Token, below.
+auth:
+  #consumer_key: PutYourConsumerKeyHere
+  #consumer_secret: PutYourConsumerSecretHere
+  bearer_token: PutYourBearerTokenHere
