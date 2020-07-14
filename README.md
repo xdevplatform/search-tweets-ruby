@@ -1,3 +1,8 @@
+![](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fpremium)
+
+![](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fenterprise)
+
+
 # Ruby Tweet search client
 
 This Ruby client is written to work with the Twitter premium and enterprise versions of Tweet Search.  
