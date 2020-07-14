@@ -7,7 +7,7 @@ class URLMaker
 		attr_accessor :url, :search_tier, :search_period
 
 	def initialize
-		@data_url = "https://api.twitter.com/labs/2/tweets/search/recent" #Versioning.
+		@data_url = "https://api.twitter.com/labs/2/tweets/search" #Versioning.
 		@search_tier = 'labs'
 		@search_period = 'recent'
 	end
