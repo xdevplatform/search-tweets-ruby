@@ -16,7 +16,7 @@ Poll every 5 minutes for original Tweets with mentions of keywords with media "a
 require_relative "../searchtweets/search_tweets.rb"
 require_relative "../common/utilities.rb"
 
-def check_query_and_set_defaults(oSearchTweets, query, start_time, since_id, max_results, fields)
+def check_query_and_set_defaults(oSearchTweets, query, start_time, since_id, max_results)
 
     #Provides initial "gate-keeping" on what we have been provided. Enough information to proceed?
 
@@ -69,12 +69,6 @@ def check_query_and_set_defaults(oSearchTweets, query, start_time, since_id, max
     if !max_results.nil?
         oSearchTweets.max_results = max_results
     end
-
-    #Fields is optional, defaults to 'id, text'.
-    if !fields.nil?
-        oSearchTweets.fields = fields
-    end
-
 end
 
 def set_app_configuration(oSearchTweets, exit_after, write, outbox, tag, verbose)
@@ -152,8 +146,6 @@ if __FILE__ == $0  #This script code is executed when running this file.
 
         o.on('-m MAXRESULTS', '--max', 'Specify the maximum amount of Tweets results per response (maps to "max_results"). 10 to 100, defaults to 10.') {|max_results| $max_results = max_results}  #... as in look before you leap.
 
-        o.on('-f FIELDS', '--fields', 'Tweet attributes of interest (comma-delimited) Defaults to "id,created_at,author_id,text". See https://developer.twitter.com/en/docs/labs/recent-search/api-reference/get-recent-search for details on available fields.') {|fields| $fields = fields}
-
         o.on('-x EXIT', '--exit', 'Specify the maximum amount of requests to make. "Exit app after this many requests."') {|exit_after| $exit_after = exit_after}
 
         o.on('-w WRITE', '--write',"'files', 'standard-out' (or 'so' or 'standard').") {|write| $write = write}
@@ -196,7 +188,7 @@ if __FILE__ == $0  #This script code is executed when running this file.
     oSearchTweets.set_requester #With config details, set the HTTP stage for making requests.
 
     #Validate request and commands. #So, we got what we got from the config file, so process what was passed in.
-    check_query_and_set_defaults(oSearchTweets, $query, $start_time, $since_id, $max_results, $fields)
+    check_query_and_set_defaults(oSearchTweets, $query, $start_time, $since_id, $max_results)
     set_app_configuration(oSearchTweets, $exit_after, $write, $outbox, $tag, $verbose)
 
     #Wow, we made it all the way through that!  Documentation must be awesome...
