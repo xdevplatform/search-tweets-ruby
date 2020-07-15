@@ -1,29 +1,31 @@
-# Any corresponding command-line arguments override these. These establish default configuration details.
-# Rules/filters are specified via command-line, or with a rules JSON or YAML file.
-
-#Client options.
+# Client options.
 
 # Any corresponding command-line arguments override these. This establish default configuration details.
 # Queries are specified via command-line, or with a JSON or YAML file.
+# Rules/filters are specified via command-line, or with a rules JSON or YAML file.
 
-#Client options.
 options:
   #Default API request parameters.
   max_results: 10 #For Labs this max is 100. Default is 10.
 
-  expansions: author_id,referenced_tweets.id,attachments.media_keys,geo.place_id
-  tweet.fields: attachments,author_id,created_at,entities,geo,public_metrics,referenced_tweets,source
-  user.fields: created_at,description,location,name,pinned_tweet_id,public_metrics,url,username,verified
-  media.fields: media_key,public_metrics,type,url
-  place.fields: country_code,full_name,geo,id,name,place_type
-  poll.fields: options
+  expansions: attachments.poll_ids,attachments.media_keys,author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id
+  tweet.fields: attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,promoted_metrics,public_metrics,referenced_tweets,source,text,withheld
+  #If you are using user-context authentication, these Tweet field ise available for the authorizing user: non_public_metrics.
+  #If that user is promoting Tweets with Twitter Ads, these Tweet fields are available: organic_metrics, promoted_metrics
+  user.fields: created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld
+  media.fields: duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width
+  place.fields: contained_within,country,country_code,full_name,geo,id,name,place_type
+  poll.fields: duration_minutes,end_datetime,id,options,voting_status
 
   write_mode: so  # options: json, files, so/standard/standard-out, hash --> Store Tweets in local files or print to system out?
   out_box: ./output # Folder where retrieved data goes.
   max_tweets_in_returned_hash: 10000
 
-#Credentials. Insert your Consumer Key and Secret, OR your Bearer Token, below.
-auth:
-  #consumer_key: PutYourConsumerKeyHere
-  #consumer_secret: PutYourConsumerSecretHere
-  bearer_token: PutYourBearerTokenHere
+
+  #Credentials. Insert your Consumer Key and Secret, OR your Bearer Token, below.
+  auth:
+    #consumer_key: MyConsumerKey
+    #consumer_secret: MyConsumerSecret
+    bearer_token: AAAAAMyBearerToken
+
+  headers:
