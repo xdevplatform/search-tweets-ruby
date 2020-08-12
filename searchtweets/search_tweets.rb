@@ -334,7 +334,7 @@ class SearchTweets
     if not includes.nil?
 
       if includes.key?("users")
-        puts "Adding user objects."
+        puts "Adding user objects."  if @verbose
         users = includes['users']
         puts "Loading 'includes' users array.." if @verbose
         users.each do |user|
@@ -447,15 +447,28 @@ class SearchTweets
 
     else #if hash, load up array
 
-      #Maintain array!
-      tweets = api_response['data']
-      puts 'Loading response into @tweets array..' if @verbose
-      tweets.each do |tweet|
-        @tweets << tweet
+      if api_response.key?("data")
+        #Maintain array!
+        tweets = api_response['data']
+        puts 'Loading response into @tweets array..' if @verbose
+        tweets.each do |tweet|
+          @tweets << tweet
+        end
+      else
+        puts "No Tweets." if @verbose
       end
 
-      maintain_includes_arrays(api_response)
+      if api_response.key?("includes")
+        maintain_includes_arrays(api_response)
+      end
 
+      if api_response.key?("errors")
+        errors = api_response['errors']
+        puts "Errors occurred." if @verbose
+        errors.each do |error|
+          puts "Error occurred: " + error.to_json
+        end
+      end
     end
 
     if !api_response['meta'].nil?

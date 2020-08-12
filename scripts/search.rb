@@ -1,8 +1,8 @@
 '''
 
-Provides a command-line driven wrapper around the Labs Recent search endpoint.
+Provides a command-line driven wrapper around the Twitter API v2 recent search endpoint.
 
-Originally built for premium and enterprise tiers of search, now updated to the Labs Recent search endpoint.
+Originally built for premium and enterprise tiers of search, now updated to the Twitter API v2 recent search endpoint.
 
 -------------------------------------------------------------------------------------------------------------------
 This script/app is a command-line wrapper to search-tweets.rb, the SearchTweets class. The code here focuses on parsing

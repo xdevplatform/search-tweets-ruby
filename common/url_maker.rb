@@ -7,9 +7,9 @@ class URLMaker
 		attr_accessor :url, :search_tier, :search_period
 
 	def initialize
-		@data_url = "https://api.twitter.com/labs/2/tweets/search" #Versioning.
-		@search_tier = 'labs'
-		@search_period = 'recent'
+		@data_url = "https://api.twitter.com/2/tweets/search/recent" #Versioning.
+		#@search_tier = 'labs'
+		#@search_period = 'recent'
 	end
 
 	def get_data_url()
@@ -18,7 +18,7 @@ class URLMaker
 	
 	def get_count_url()
 
-		return "Counts endpoint not supported in Labs."
+		return "Counts endpoint not supported in current version of Twitter AI v2 recent search."
 		
 	end
 

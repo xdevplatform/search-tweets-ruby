@@ -1,13 +1,16 @@
-[![Labs v2](https://img.shields.io/static/v1?label=Twitter%20API&message=Developer%20Labs%20v2&color=794BC4&style=flat&logo=Twitter)](https://developer.twitter.com/en/docs/labs/overview/versioning)
+![](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fv2)
 
-# Ruby client for Labs Recent search endpoint
+# Ruby client for Twitter API v2 recent search endpoint
 
-Welcome to the main branch of the Ruby search client. This branch supports the [Labs v2 search](https://developer.twitter.com/en/docs/labs/recent-search/overview) only, and drops support for the premium and enterprise tiers. 
+Welcome to the main branch of the Ruby search client. This branch supports the [Twitter API v2 recent search](https://developer.twitter.com/en/docs/twitter-api/tweets/search/introduction) 
+only, and drops support for the premium and enterprise tiers. 
 
-Note: If you are looking for the original version that works with premium and enterprise versions of search, head on over to the "enterprise-premium" branch.
+If you are looking for the original version that works with premium and enterprise versions of search, head on over to the "enterprise-premium" branch.
+
+If you are already familiar with the 'labs' version/branch, it's time to start using the Twitter API v2 version. 
 
 ## Features
-+ Supports [Labs Recent search v2](https://developer.twitter.com/en/docs/labs/recent-search/overview).
++ Supports [Twitter API v2 recent search](https://developer.twitter.com/en/docs/twitter-api/tweets/search/introduction).
 + Command-line utility is pipeable to other tools (e.g., jq).
 + Automatically handles pagination of search results with specifiable limits. This enables users to define a *study period* of interest, and the search client code will manage however many requests are required to transverse that period, up to 100 Tweets at a time. 
 + By default, the script writes Tweets to standard out, and can also write to files or return either a hash or JSON string.
@@ -20,7 +23,9 @@ Jump to:
 
 + [Overview](#overview)
 + [Getting started](#getting-started)
++ [Configuring client](#config)
    + [Setting credentials](#credentials)
+   + [Configuration file](#config-file)
    + [Command-line arguments](#arguments)
 + [Example script commands](#example-calls)
 + [Running in 'polling' mode](#polling)
@@ -68,8 +73,9 @@ The ```search.rb``` and ```polling.rb``` scripts both demonstrate creating an in
 
 Four fundamental steps need to be taken to start using this search client: 
 
-1) Establish access to the Labs recent search endpoint at https://developer.twitter.com/en/docs/labs/overview/whats-new
-2) Obtain credentials for authenticating with the search endpoint. You'll need to create a Twitter App and generate a application/consumer key and secret. You can configure the scripts with either the consumer key and secret tokens or a Bearer Token that you have generated. (The Labs Recent search endpoint uses Bearer Token authentication. If you use just the key and secret, the search client will generate the Bearer Token.) For more information, see our authentication documentation [HERE](https://developer.twitter.com/en/docs/basics/authentication/oauth-2-0).
+1) Establish access to the Twitter API v2 endpoints at 1) Establish access to the Twitter API v2 endpoints at https://developer.twitter.com/en/docs/labs/overview/whats-new
+2) Obtain credentials for authenticating with the search endpoint. You'll need to create a developer App and generate a application/consumer key and secret. You can 
+configure the scripts with either the consumer key and secret tokens or a Bearer Token that you have generated. (The Labs Recent search endpoint uses Bearer Token authentication. If you use just the key and secret, the search client will generate the Bearer Token.) For more information, see our authentication documentation [HERE](https://developer.twitter.com/en/docs/basics/authentication/oauth-2-0).
 3) Get this Ruby app running in your environment: 
 + Clone respository. 
 + Get gems installed with ```bundle install```. See project Gemfile. The client uses some basic gems like 'json' and 'yaml'. Test it out by running ```$ruby scripts/search.rb -h```. You should see a help menu. 
@@ -78,18 +84,33 @@ Four fundamental steps need to be taken to start using this search client:
 
 **A few notes:**
 
-+ Labs Recent search supports queries up to 512 characters long.
-  + See our [guide on creating search queries](https://developer.twitter.com/en/docs/labs/recent-search/guides/search-queries).
++ Recent search supports queries up to 512 characters long.
+  + See our [guide on creating search queries](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-rule).
 + If not request start and end times are specified, the endpoint defaults to that last 7 days, starting with the most recent Tweets, and paginating backwards through time.  
-+ For more information on the search endpoint that this client exercises, see our [API Reference[(https://developer.twitter.com/en/docs/labs/recent-search/api-reference/get-recent-search).
++ For more information on the search endpoint that this client exercises, see our [API Reference[(https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent).
+
+
+## Configuring client <a id="config" class="tall"></a>
+
+This client is configured with a combinaton of command-line arguments, environmental variables, and a YAML config file. 
+This configuraton file defaults to ```./config/.config.yaml```, although you can specify a different path and name with the 
+```--config``` command-line argument. 
+
+In general, command-line arguments are used to set the most frequently changed parameters, such as the query and the start and end times. 
+Other parameters, such as the Tweet JSON fields of interest, can be set in the YAML file. Some configuation details, such as 
+the output mode and maximum results per response, are setable by both command-line and YAML settings. If these settings are
+provided via the command-line, they will overwrite any setting made in the config file.
 
 ### Setting credentials <a id="credentials" class="tall"></a>
 
-Twitter endpoint credentials can be configured as *environmental variables* or set up in the ```./config/.config.yaml``` YAML file. The search client first checks for environmental variables, and if not found there, it then looks in the YAML file. 
+Twitter endpoint credentials can be configured as *environmental variables* or set up in the YAML file. 
 
-#### Environmental variables
+The search client first checks for environmental variables, and if not found there, it then looks in the YAML file. 
 
-To set up your credentials environmental variables, use the following commands. You can set up either the ```TWITTER_CONSUMER_KEY``` and ```TWITTER_CONSUMER_SECRET```values or just the ```TWITTER_BEARER_TOKEN``` value. 
+#### Setting credentials with environmental variables
+
+To set up your credentials environmental variables, use the following commands. You can set up either the ```TWITTER_CONSUMER_KEY``` 
+and ```TWITTER_CONSUMER_SECRET```values or just the ```TWITTER_BEARER_TOKEN``` value. 
 
 ```bash
 export TWITTER_CONSUMER_KEY=N0TmYC0Nsum4Rk3Y
@@ -102,7 +123,7 @@ export TWITTER_BEARER_TOKEN=AAAAAAAAreallylongBearerT0k4n
 
 To have these environmental variables persist between terminal sessions, add these commands to your ~/.bash_profile (at least on Linux/Unix).
 
-#### YAML configuration
+#### Setting credentials in YAML configuration file
 
 A ```.config.yaml``` file is used to set script options, and optionally, endpoint credentials. By default, this file is assumed to be in a ```./config``` subfolder of the main project directory. You can store it somewhere else and use the ```--config``` argument to provide the file path. 
 
@@ -113,7 +134,45 @@ In the YAML file there is a ```auth:``` section. You can either set the ```consu
 auth:
   consumer_key: N0TmYC0Nsum4Rk3Y
   consumer_secret: N0TmYC0Nsum4Rs3cR3t
-  bearer_token: AAAAAAAAreallylongBearerT0k4n
+  bearer_token: AAAAAAAAreallylongBearerT0k4n 
+```
+
+## Setting client options in YAML configuration file  <a id="config-file" class="tall">&nbsp;</a>
+
+This version of search enables developers to fine-tune the details they want to include in the endpoint's responses, using [expansions](https://developer-staging.twitter.com/en/docs/twitter-api/expansions) 
+and [fields](https://developer-staging.twitter.com/en/docs/twitter-api/fields). Since expansions and fields details can be 
+very lengthy, these options are set in the YAML configuraion file. The example file below includes all the available options 
+for expansions and fields. As you work with the client's output, you may decide to exclude objects and fields that you do
+not need. 
+
+Other options configurable in the file include the maximum number of Tweets to include per 'page' of results, ```max_results```, 
+and how the data is processed. If the ```write_mode``` is set to 'files', the ```out_box``` is set to where you want files 
+to be written.
+
+If the ```write_mode``` is set to 'json' or 'hash', the ```max_tweets_in_returned_hash``` can be used to set a upper limit
+on the number of Tweets written to this one data structure. This client is designed to make as many requests as needed to 
+retrieve every Tweet that matches your query and study period. Since that number of Tweets can be very large, this can be used 
+to limit the amount of memory used to store the payload. 
+
+```yaml
+#Client options.
+options:
+  #Default API request parameters.
+  max_results: 50 #For v2 this max is 100. Default is 10.
+
+  expansions: attachments.poll_ids,attachments.media_keys,author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id
+  tweet.fields: attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,promoted_metrics,public_metrics,referenced_tweets,source,text,withheld
+  #If you are using user-context authentication, these Tweet field ise available for the authorizing user: non_public_metrics.
+  #If that user is promoting Tweets with Twitter Ads, these Tweet fields are available: organic_metrics, promoted_metrics
+  user.fields: created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld
+  media.fields: duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width
+  place.fields: contained_within,country,country_code,full_name,geo,id,name,place_type
+  poll.fields: duration_minutes,end_datetime,id,options,voting_status
+
+  write_mode: so  # options: json, files, so/standard/standard-out, hash --> Store Tweets in local files or print to system out?
+  out_box: ./output # Folder where retrieved data goes.
+  max_tweets_in_returned_hash: 10000
+
 ```
 
 ## Command-line arguments <a id="arguments" class="tall">&nbsp;</a>
@@ -136,7 +195,7 @@ Usage: search [options]
     -i, --since-id SINCEID           All matching Tweets since this Tweet ID was created (exclusive).
     -u, --until-id UNTILID           All matching Tweets up until this ID was created (exclusive).
     -m, --max MAXRESULTS             Specify the maximum amount of Tweets results per response (maps to "max_results"). 10 to 100, defaults to 10.
-    -f, --fields FIELDS              Tweet attributes of interest (comma-delimited) Defaults to "id,created_at,author_id,text". See https://developer.twitter.com/en/docs/labs/recent-search/api-reference/get-recent-search for details on available fields.
+
     -x, --exit EXIT                  Specify the maximum amount of requests to make. "Exit app after this many requests."
     -w, --write WRITE                'files', 'standard-out' (or 'so' or 'standard').
     -o, --outbox OUTBOX              Optional. Triggers the generation of files and where to write them.
