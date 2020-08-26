@@ -16,7 +16,8 @@ If you are already familiar with the 'labs' version/branch, it's time to start u
 + By default, the script writes Tweets to standard out, and can also write to files or return either a hash or JSON string.
 + Flexible usage within a Ruby program.
 + Supports "polling" use cases.  
-+ **Note:** the Labs Recent search endpoint *does not* support the ```counts``` endpoint. 
++ Supports the new v2 feature of selecting the object attributes of interest with the new `tweet.fields`, `user.fields`, `media.fields`, `place.fields`, and `poll.fields` request parameters. These parameter values are configured in the client YAML configuration file. 
++ **Note:** the v2 recent search endpoint *does not* support the ```counts``` endpoint. 
 
 ----------------
 Jump to:
