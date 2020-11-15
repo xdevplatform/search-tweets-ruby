@@ -217,7 +217,7 @@ if __FILE__ == $0  #This script code is executed when running this file.
 
     #Provided config file, which can provide auth, URL metadata, and app options.
     if $config.nil?
-			$config = "../config/.config.yaml" #Set default.
+        $config = File.expand_path("../config/.config.yaml", __dir__) #Set default.
     end
     
     if !File.exists?($config) 
