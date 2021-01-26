@@ -1,23 +1,29 @@
 ![](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fv2)
 
-# Ruby client for Twitter API v2 recent search endpoint
+# Ruby client for Twitter API v2 search endpoints
 
-Welcome to the main branch of the Ruby search client. This branch supports the [Twitter API v2 recent search](https://developer.twitter.com/en/docs/twitter-api/tweets/search/introduction) 
+Welcome to the main branch of the Ruby search client. This branch supports the [Twitter API v2 'recent' and 'all' search](https://developer.twitter.com/en/docs/twitter-api/tweets/search/introduction) 
 only, and drops support for the premium and enterprise tiers. 
+
+The 'recent' search endpoint provides Tweets from the past 7 days. The 'all' search endpoint, launched in January 2021 as part of the 'academic research' tier of Twitter API v2 access,
+provides access to all publicly avaialble Tweets posted since March 2006.
+
+To learn more about the Twitter academic research program, see this [Twitter blog post](https://blog.twitter.com/developer/en_us/topics/tips/2021/enabling-the-future-of-academic-research-with-the-twitter-api.html).
 
 If you are looking for the original version that works with premium and enterprise versions of search, head on over to the "enterprise-premium" branch.
 
-If you are already familiar with the 'labs' version/branch, it's time to start using the Twitter API v2 version. 
+If you are already familiar with the 'labs' version/branch, that version has been deprecated and it's time to start using the Twitter API v2 version. 
 
 ## Features
-+ Supports [Twitter API v2 recent search](https://developer.twitter.com/en/docs/twitter-api/tweets/search/introduction).
++ Supports [Twitter API v2 'recent' and 'all' search](https://developer.twitter.com/en/docs/twitter-api/tweets/search/introduction).
 + Command-line utility is pipeable to other tools (e.g., jq).
 + Automatically handles pagination of search results with specifiable limits. This enables users to define a *study period* of interest, and the search client code will manage however many requests are required to transverse that period, up to 100 Tweets at a time. 
 + By default, the script writes Tweets to standard out, and can also write to files or return either a hash or JSON string.
 + Flexible usage within a Ruby program.
 + Supports "polling" use cases.  
-+ Supports the new v2 feature of selecting the object attributes of interest with the new `tweet.fields`, `user.fields`, `media.fields`, `place.fields`, and `poll.fields` request parameters. These parameter values are configured in the client YAML configuration file. 
-+ **Note:** the v2 recent search endpoint *does not* support the ```counts``` endpoint. 
++ Supports the new v2 feature of selecting the object attributes of interest with the new `tweet.fields`, `user.fields`, `media.fields`, `place.fields`, and `poll.fields` request parameters. These parameter values are configured in the client YAML configuration file.
++ **New**: Now that there are two search endpoints, the endpoint you want to hit is specified in the `config.yaml` configuration file, with the `endpoint' key. 
++ **Note:** the v2 search endpoints *do not* support the ```counts``` endpoint. 
 
 ----------------
 Jump to:
@@ -36,7 +42,7 @@ Jump to:
 
 ## Overview <a id="overview" class="tall"></a>
 
-This project includes two Ruby scripts (```search.rb``` and ```polling.rb```, both in the /scripts folder) that are written for the Labs Recent search endpoint. These scripts demonstrate how to create an instance of this project's main ```SearchTweets``` class (implemented in searchtweets/search_tweets.rb) and ask it for data. 
+This project includes two Ruby scripts (```search.rb``` and ```polling.rb```, both in the /scripts folder) that are written for the v2 search endpoints. These scripts demonstrate how to create an instance of this project's main ```SearchTweets``` class (implemented in searchtweets/search_tweets.rb) and ask it for data. 
 
 These scripts are command-line driven and support the following features:
 
@@ -76,7 +82,7 @@ Four fundamental steps need to be taken to start using this search client:
 
 1) Establish access to the Twitter API v2 endpoints at 1) Establish access to the Twitter API v2 endpoints at https://developer.twitter.com/en/docs/labs/overview/whats-new
 2) Obtain credentials for authenticating with the search endpoint. You'll need to create a developer App and generate a application/consumer key and secret. You can 
-configure the scripts with either the consumer key and secret tokens or a Bearer Token that you have generated. (The Labs Recent search endpoint uses Bearer Token authentication. If you use just the key and secret, the search client will generate the Bearer Token.) For more information, see our authentication documentation [HERE](https://developer.twitter.com/en/docs/basics/authentication/oauth-2-0).
+configure the scripts with either the consumer key and secret tokens or a Bearer Token that you have generated. (The v2 search endpoints uses Bearer Token authentication. If you use just the key and secret, the search client will generate the Bearer Token.) For more information, see our authentication documentation [HERE](https://developer.twitter.com/en/docs/basics/authentication/oauth-2-0).
 3) Get this Ruby app running in your environment: 
 + Clone respository. 
 + Get gems installed with ```bundle install```. See project Gemfile. The client uses some basic gems like 'json' and 'yaml'. Test it out by running ```$ruby scripts/search.rb -h```. You should see a help menu. 
@@ -140,6 +146,9 @@ auth:
 
 ## Setting client options in YAML configuration file  <a id="config-file" class="tall">&nbsp;</a>
 
+This client works with both the 'recent' and 'all' search endpoints. As seen in the example `.config.yaml` file below, 
+the endpoint you are working with is specified with the `endpoint` key. 
+
 This version of search enables developers to fine-tune the details they want to include in the endpoint's responses, using [expansions](https://developer-staging.twitter.com/en/docs/twitter-api/expansions) 
 and [fields](https://developer-staging.twitter.com/en/docs/twitter-api/fields). Since expansions and fields details can be 
 very lengthy, these options are set in the YAML configuraion file. The example file below includes all the available options 
@@ -158,6 +167,8 @@ to limit the amount of memory used to store the payload.
 ```yaml
 #Client options.
 options:
+  endpoint: https://api.twitter.com/2/tweets/search/recent #Also: https://api.twitter.com/2/tweets/search/all
+
   #Default API request parameters.
   max_results: 50 #For v2 this max is 100. Default is 10.
 
@@ -256,7 +267,7 @@ Both example scripts implement a polling option, and in very different ways. One
 
 ### Polling with ```search.rb```
 
-The ```search.rb``` script was originally built to manage requests across a *study period* of interest. Search endpoints return a relatively small amount of Tweets per response, and pagination is usually required to compile the Tweet collection of interest. Labs Recent search returns 10 Tweets per response by default, and the client ```--max``` argument is avialable to adjust that up to the maximum number of 100 Tweets.  
+The ```search.rb``` script was originally built to manage requests across a *study period* of interest. Search endpoints return a relatively small amount of Tweets per response, and pagination is usually required to compile the Tweet collection of interest. The v2 search endpoints return 10 Tweets per response by default, and the client ```--max``` argument is avialable to adjust that up to the maximum number of 100 Tweets.  
 
 The ```search.rb``` script now supports a ```--poll``` command-line argument. When this argument is included, the script knows to leave a 'breadcrumb' ```newest_id.txt``` file after it has completed its set of paginated requests. Search endpoints start with the most recent Tweets first, and paginate backwards through time. So the trick here, which the search client manages for you, is to persist the ```newest_id``` from the *first* request, regardless of how many requests were required to paginate and transverse your *study period*. 
 
@@ -284,7 +295,7 @@ The ```polling.rb``` script will continue to run until the script is stopped.
 
 ## Specifying search period start and end times <a id="specifying-times" class="tall"></a>
 
-By default the Labs recent search endpoint will search from the previous 7 days. However, most search requests will have a more specific period of interest. With the Labs search endpont the start of the search period is specified with the ```start_time``` parameter, and the end with ```end_time``` request parameter. 
+By default the recent search endpoint will search from the previous 7 days, and the 'all' endpoint will return 30 days. However, most search requests will have a more specific period of interest. With the search endpoints, the start of the search period is specified with the ```start_time``` parameter, and the end with ```end_time``` request parameter. 
 
 Both timestamps assume the UTC timezone. If you are making search requests based on a local timezone, you'll need to convert these timestamps to UTC. These search APIs require these timestamps to have the 'YYYY-MM-DDTHH:mm:ssZ' format (ISO 8601/RFC 3339). As that format suggests, search request periods can have a second granularity. 
 
