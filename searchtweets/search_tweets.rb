@@ -18,7 +18,6 @@ class SearchTweets
   #Common classes
   require_relative '../common/requester'
   require_relative '../common/queries'
-  require_relative '../common/url_maker'
   require_relative '../common/utilities.rb' #Mixin code.
 
   MAX_RESULTS_LIMIT = 100 #Limit on the number of Tweet IDs per API request, can be overridden.
@@ -55,8 +54,7 @@ class SearchTweets
 
                 #Helper objects.
                 :requester, #Object that knows RESTful HTTP requests.
-                :urlData, #Search uses two different end-points...
-                :url_maker, #Object that builds request URLs.
+                :url_data, #Search uses two different end-points...
 
                 :exit_after, #Supports user option to quit after x requests.
                 #:request_start_time, #May be breaking up 'study' period into separate smaller periods.
@@ -105,7 +103,6 @@ class SearchTweets
 
     #Helper objects, singletons.
     @requester = Requester.new #HTTP helper class.
-    @url_maker = URLMaker.new #Abstracts away the URL details...
     @queries = Queries.new #Can load queries from configuration files.
 
     @request_count = 0
@@ -119,6 +116,8 @@ class SearchTweets
   def get_system_config(config_file)
 
     config = YAML.load_file(config_file)
+
+    @url_data = config['options']['endpoint']
 
     #TODO: Update README to match these updates:
 
@@ -183,10 +182,8 @@ class SearchTweets
     @requester.bearer_token = @auth[:bearer_token] #Set the info needed for authentication.
     @requester.headers = @headers
 
-    @urlData = @url_maker.get_data_url()
-
     #Default to the "data" url.
-    @requester.url = @urlData #Pass the URL to the HTTP object.
+    @requester.url = @url_data #Pass the URL to the HTTP object.
   end
 
   def get_search_rules
@@ -378,7 +375,7 @@ class SearchTweets
 
     result_count = nil #Only Labs returns this.
 
-    @requester.url = @urlData
+    @requester.url = @url_data
 
     request_data = build_data_request(query, start_time, end_time, since_id, until_id, max_results, expansions, fields, next_token)
 
