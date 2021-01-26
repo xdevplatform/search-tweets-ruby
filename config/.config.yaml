@@ -8,6 +8,9 @@
 
 #Client options.
 options:
+
+  endpoint: https://api.twitter.com/2/tweets/search/recent #Also: https://api.twitter.com/2/tweets/search/all
+  
   #Default API request parameters.
   max_results: 10 #For Labs this max is 100. Default is 10.
 
