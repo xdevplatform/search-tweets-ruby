@@ -428,15 +428,18 @@ class SearchTweets
 
     if @write_mode == 'files' #write the file.
 
-      #Each 'page' has a start and end time, go get those for generating filename.
+      if api_response.key?("data")
+        #Each 'page' has a start and end time, go get those for generating filename.
+        filename = ""
+        #TODO: just pass in first timestamp: results.first['created_at']
+        filename = get_file_name(query, api_response['data'])
 
-      filename = ""
-      #TODO: just pass in first timestamp: results.first['created_at']
-      filename = get_file_name(query, api_response['data'])
-
-      puts "Storing Search API data in file: #{filename}"
-      File.open("#{@out_box}/#{filename}.json", "w") do |new_file|
-          new_file.write(api_response.to_json)
+        puts "Storing Search API data in file: #{filename}"
+        File.open("#{@out_box}/#{filename}.json", "w") do |new_file|
+            new_file.write(api_response.to_json)
+        end
+      else
+        puts "No Tweets." if @verbose
       end
 
     elsif @write_mode == 'standard_out' #Standard out
